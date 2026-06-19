@@ -18,21 +18,13 @@
                         destaque: '#E50914',
                         destaqueEscuro: '#B00006',
                         fundo: '#F8F9FA',
-                        fundoEscuro: '#121212',
                         card: '#FFFFFF',
-                        cardEscuro: '#1E1E1E',
                         borda: '#E2E8F0',
-                        bordaEscuro: '#2D2D2D',
                         texto: '#1E293B',
-                        textoClaro: '#F1F5F9',
                         textoSuave: '#64748B',
                         sucesso: '#10B981',
                         alerta: '#F59E0B',
-                        erro: '#EF4444',
-                        matific: '#2563EB',
-                        alura: '#7C3AED',
-                        speak: '#10B981',
-                        redacao: '#F59E0B'
+                        erro: '#EF4444'
                     },
                     fontFamily: {
                         sans: ['Segoe UI', 'Roboto', 'Arial', 'sans-serif']
@@ -43,18 +35,121 @@
     </script>
 
     <style type="text/tailwindcss">
-        @layer utilities {
-            .conteudo { @apply max-w-5xl mx-auto px-5; }
-            .campo { @apply w-full px-4 py-3 border border-borda rounded-lg bg-white text-texto focus:outline-none focus:ring-2 focus:ring-destaque/20 focus:border-destaque transition-shadow; }
-            .btn-principal { @apply w-full bg-destaque hover:bg-destaqueEscuro text-white font-semibold py-3 rounded-lg transition-colors; }
-            .btn-secundario { @apply w-full bg-white border border-destaque text-destaque font-semibold py-3 rounded-lg transition-colors hover:bg-destaque/5; }
-            .menu-item { @apply flex items-center gap-3 w-full px-4 py-3 rounded-lg text-left text-texto hover:bg-destaque/5 transition-colors; }
-            .menu-ativo { @apply bg-destaque/10 text-destaque font-medium; }
-            .card { @apply bg-card rounded-lg border border-borda p-5 shadow-sm; }
+        :root {
+            --cor-principal: #E50914;
+            --cor-principal-escura: #B00006;
+            --cor-fundo: #F8F9FA;
+            --cor-card: #FFFFFF;
+            --cor-borda: #E2E8F0;
+            --cor-texto: #1E293B;
+            --cor-texto-suave: #64748B;
         }
 
-        * { scrollbar-width: thin; scrollbar-color: #E50914 #F8F9FA; }
-        html, body { @apply bg-fundo text-texto min-h-screen; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--cor-principal) var(--cor-fundo);
+        }
+
+        html, body {
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .conteudo { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+        .campo {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--cor-card);
+            border: 1px solid var(--cor-borda);
+            border-radius: 0.5rem;
+            color: var(--cor-texto);
+            transition: all 0.2s ease;
+        }
+
+        .campo:focus {
+            outline: none;
+            border-color: var(--cor-principal);
+            box-shadow: 0 0 0 2px rgba(var(--cor-principal), 0.15);
+        }
+
+        .btn-principal {
+            background-color: var(--cor-principal);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-principal:hover {
+            background-color: var(--cor-principal-escura);
+        }
+
+        .btn-secundario {
+            background: transparent;
+            color: var(--cor-principal);
+            border: 1px solid var(--cor-principal);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secundario:hover {
+            background-color: rgba(var(--cor-principal), 0.08);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--cor-texto);
+            background: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(var(--cor-principal), 0.08);
+        }
+
+        .menu-ativo {
+            background-color: rgba(var(--cor-principal), 0.12);
+            color: var(--cor-principal);
+            font-weight: 500;
+        }
+
+        .card {
+            background: var(--cor-card);
+            border: 1px solid var(--cor-borda);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: border 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: #CBD5E1;
+        }
+
+        .barra-lateral {
+            background: var(--cor-card);
+            border-right: 1px solid var(--cor-borda);
+        }
     </style>
 </head>
 <body>
@@ -63,16 +158,12 @@
 <div id="tela-login" class="min-h-screen flex flex-col justify-center">
     <div class="conteudo w-full max-w-md">
         <div class="text-center mb-8">
-            <div class="flex items-center justify-center gap-3 mb-2">
-                <i class="fa fa-graduation-cap text-4xl text-destaque"></i>
-                <h1 class="text-4xl font-black text-primaria">FEIZÃO DE MORAES</h1>
-            </div>
-            <p class="text-textoSuave text-lg">Sistema da Sala do Futuro</p>
-            <p class="text-textoSuave text-sm mt-1">Preencha seus dados para acessar e sincronizar</p>
+            <h1 class="text-4xl font-black" style="color: var(--cor-principal)">FEIZÃO DE MORAES</h1>
+            <p class="text-textoSuave mt-1">Sistema de Tarefas e Redação</p>
         </div>
 
         <div class="card">
-            <div id="aviso-login" class="hidden p-3 mb-4 rounded-lg text-center text-sm"></div>
+            <div id="aviso-login" class="hidden mb-4 p-2.5 rounded text-center text-sm"></div>
 
             <div class="grid grid-cols-3 gap-3 mb-4">
                 <div class="col-span-2">
@@ -109,282 +200,162 @@
                 <label class="block text-sm text-textoSuave mb-1">Senha</label>
                 <div class="relative">
                     <input type="password" id="senha" class="campo pr-10" placeholder="Senha de acesso">
-                    <button type="button" onclick="mostrarSenha()" class="absolute right-3 top-3 text-textoSuave hover:text-texto">
+                    <button type="button" onclick="alternarSenha()" class="absolute right-3 top-1/2 -translate-y-1/2 text-textoSuave hover:text-texto">
                         <i class="fa fa-eye"></i>
                     </button>
                 </div>
             </div>
 
-            <button onclick="fazerLogin()" id="btn-acessar" class="btn-principal mb-3">Acessar e Sincronizar</button>
-            <button type="button" class="btn-secundario">Voltar</button>
+            <button onclick="fazerLogin()" class="btn-principal w-full mb-3">Acessar</button>
 
-            <div class="text-center mt-6 text-textoSuave text-xs">
-                Desenvolvido por Dengue de Goiás • Sincronização com Sala do Futuro
+            <div class="text-center mt-5 text-textoSuave text-xs">
+                Desenvolvido por Dengue de Goiás
             </div>
         </div>
     </div>
 </div>
 
-<!-- PAINEL PRINCIPAL - LAYOUT ORIGINAL -->
-<div id="painel-principal" class="hidden min-h-screen">
-    <div class="flex flex-col md:flex-row h-screen">
-        <!-- MENU LATERAL ORIGINAL -->
-        <aside class="bg-white border-r border-borda w-full md:w-72 flex-shrink-0 overflow-y-auto">
-            <div class="p-5 border-b border-borda">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-12 h-12 rounded-full bg-destaque/10 flex items-center justify-center text-destaque font-bold text-xl" id="inicial-usuario">A</div>
+<!-- PAINEL PRINCIPAL -->
+<div id="painel-principal" class="hidden min-h-screen flex flex-col md:flex-row">
+    <!-- MENU LATERAL -->
+    <aside class="w-full md:w-64 barra-lateral flex-shrink-0">
+        <div class="p-4 border-b border-borda">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg" style="background: rgba(var(--cor-principal), 0.15); color: var(--cor-principal)" id="inicial-nome">A</div>
+                <div>
+                    <h3 class="font-medium" id="nome-aluno">Carregando...</h3>
+                    <p class="text-xs text-textoSuave" id="dados-aluno">---</p>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-sucesso font-medium" id="status-sincronizacao">✅ Sincronizado</div>
+        </div>
+
+        <nav class="p-3 space-y-1">
+            <button onclick="mudarAba('inicio')" id="aba-inicio" class="menu-item menu-ativo">
+                <i class="fa fa-home"></i>
+                <span>Início</span>
+            </button>
+            <button onclick="mudarAba('tarefas')" id="aba-tarefas" class="menu-item">
+                <i class="fa fa-check-square-o"></i>
+                <span>Tarefas</span>
+            </button>
+            <button onclick="mudarAba('redacao')" id="aba-redacao" class="menu-item">
+                <i class="fa fa-pencil"></i>
+                <span>Redação Paulista</span>
+            </button>
+            <button onclick="abrirPersonalizacao()" class="menu-item">
+                <i class="fa fa-paint-brush"></i>
+                <span>Personalizar Cores</span>
+            </button>
+            <button onclick="forcarSincronizacao()" class="menu-item text-alerta hover:bg-alerta/10">
+                <i class="fa fa-refresh"></i>
+                <span>Atualizar</span>
+            </button>
+            <div class="h-px bg-borda my-3"></div>
+            <button onclick="sair()" class="menu-item text-erro hover:bg-erro/10">
+                <i class="fa fa-sign-out"></i>
+                <span>Sair</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 p-4 md:p-6 overflow-auto">
+        <!-- INÍCIO -->
+        <div id="conteudo-inicio" class="conteudo-aba">
+            <h2 class="text-xl font-semibold mb-5">Visão Geral</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="card border-t-2" style="border-color: var(--cor-principal)">
+                    <h3 class="text-sm text-textoSuave">Pendentes</h3>
+                    <p class="text-3xl font-bold mt-1" style="color: var(--cor-principal)" id="cont-pendentes">0</p>
+                </div>
+                <div class="card border-t-2 border-sucesso">
+                    <h3 class="text-sm text-textoSuave">Concluídas</h3>
+                    <p class="text-3xl font-bold mt-1 text-sucesso" id="cont-concluidas">0</p>
+                </div>
+                <div class="card border-t-2 border-alerta">
+                    <h3 class="text-sm text-textoSuave">Total</h3>
+                    <p class="text-3xl font-bold mt-1 text-alerta" id="cont-total">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAREFAS -->
+        <div id="conteudo-tarefas" class="conteudo-aba hidden">
+            <h2 class="text-xl font-semibold mb-4">📋 Tarefas</h2>
+            <div class="card mb-5">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <input type="text" id="titulo-tarefa" class="campo" placeholder="Título da tarefa">
+                    <input type="number" id="tempo-tarefa" min="1" value="1" class="campo" placeholder="Tempo (min)">
+                    <input type="date" id="prazo-tarefa" class="campo">
+                </div>
+                <textarea id="descricao-tarefa" class="campo mb-3" rows="2" placeholder="Descrição (opcional)"></textarea>
+                <button onclick="adicionar('tarefa')" class="btn-principal">Adicionar Tarefa</button>
+            </div>
+            <div id="lista-tarefa" class="space-y-3"></div>
+        </div>
+
+        <!-- REDAÇÃO -->
+        <div id="conteudo-redacao" class="conteudo-aba hidden">
+            <h2 class="text-xl font-semibold mb-4">✍️ Redação Paulista</h2>
+            <div class="card mb-5">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <input type="text" id="titulo-redacao" class="campo" placeholder="Tema da redação">
+                    <input type="number" id="tempo-redacao" min="1" value="1" class="campo" placeholder="Tempo (min)">
+                    <input type="date" id="prazo-redacao" class="campo">
+                </div>
+                <textarea id="texto-redacao" class="campo mb-3" rows="4" placeholder="Escreva o conteúdo ou anotações"></textarea>
+                <button onclick="adicionar('redacao')" class="btn-principal">Salvar Redação</button>
+            </div>
+            <div id="lista-redacao" class="space-y-3"></div>
+        </div>
+
+        <!-- PERSONALIZAÇÃO DE CORES -->
+        <div id="conteudo-personalizar" class="conteudo-aba hidden">
+            <h2 class="text-xl font-semibold mb-4">🎨 Personalizar Cores</h2>
+            <div class="card max-w-lg">
+                <p class="text-sm text-textoSuave mb-4">Escolha as cores que deseja usar no sistema:</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <h3 class="font-semibold text-lg" id="nome-usuario">Carregando...</h3>
-                        <p class="text-sm text-textoSuave" id="serie-turma">---</p>
+                        <label class="block text-sm text-textoSuave mb-1">Cor Principal</label>
+                        <input type="color" id="cor-principal" value="#E50914" class="w-full h-10 cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-textoSuave mb-1">Cor de Fundo</label>
+                        <input type="color" id="cor-fundo" value="#F8F9FA" class="w-full h-10 cursor-pointer">
                     </div>
                 </div>
-                <p class="text-xs text-textoSuave" id="escola">---</p>
-                <div class="mt-2 text-xs text-sucesso font-medium" id="status-sincronizacao">✅ Sincronizado em tempo real</div>
+
+                <button onclick="aplicarCores()" class="btn-principal w-full">Aplicar e Salvar</button>
+                <button onclick="restaurarCores()" class="btn-secundario w-full mt-3">Restaurar Padrão</button>
             </div>
-
-            <nav class="p-3">
-                <button onclick="mudarSecao('home')" id="menu-home" class="menu-item menu-ativo w-full">
-                    <i class="fa fa-home fa-lg"></i>
-                    <span>Início</span>
-                </button>
-
-                <button onclick="mudarSecao('tarefa')" id="menu-tarefa" class="menu-item w-full">
-                    <i class="fa fa-check-square-o fa-lg"></i>
-                    <span>Tarefas</span>
-                </button>
-
-                <button onclick="mudarSecao('redacao')" id="menu-redacao" class="menu-item w-full">
-                    <i class="fa fa-pencil fa-lg"></i>
-                    <span>Redação</span>
-                </button>
-
-                <button onclick="mudarSecao('plataformas')" id="menu-plataformas" class="menu-item w-full">
-                    <i class="fa fa-laptop fa-lg"></i>
-                    <span>Plataformas</span>
-                </button>
-
-                <button onclick="mudarSecao('agenda')" id="menu-agenda" class="menu-item w-full">
-                    <i class="fa fa-calendar fa-lg"></i>
-                    <span>Agenda</span>
-                </button>
-
-                <button onclick="mudarSecao('boletim')" id="menu-boletim" class="menu-item w-full">
-                    <i class="fa fa-bar-chart fa-lg"></i>
-                    <span>Boletim</span>
-                </button>
-
-                <button onclick="mudarSecao('presenca')" id="menu-presenca" class="menu-item w-full">
-                    <i class="fa fa-user-check fa-lg"></i>
-                    <span>Presença</span>
-                </button>
-
-                <button onclick="forcarSincronizacao()" class="menu-item w-full mt-4 text-alerta hover:bg-alerta/10">
-                    <i class="fa fa-refresh fa-lg"></i>
-                    <span>Atualizar Dados</span>
-                </button>
-
-                <button onclick="sair()" class="menu-item w-full mt-2 text-erro hover:bg-erro/10">
-                    <i class="fa fa-sign-out fa-lg"></i>
-                    <span>Sair</span>
-                </button>
-            </nav>
-        </aside>
-
-        <!-- CONTEÚDO PRINCIPAL -->
-        <main class="flex-1 overflow-y-auto p-5 md:p-8">
-            <!-- INÍCIO -->
-            <div id="conteudo-home" class="conteudo-secao">
-                <h2 class="text-2xl font-bold mb-6">Bem-vindo, <span id="nome-boas-vindas"></span>!</h2>
-                <div class="grid md:grid-cols-3 gap-5 mb-8">
-                    <div class="card border-t-4 border-destaque">
-                        <h3 class="text-lg font-semibold mb-2">Atividades Pendentes</h3>
-                        <p class="text-3xl font-bold text-destaque" id="qtd-pendentes">0</p>
-                    </div>
-                    <div class="card border-t-4 border-sucesso">
-                        <h3 class="text-lg font-semibold mb-2">Concluídas</h3>
-                        <p class="text-3xl font-bold text-sucesso" id="qtd-concluidas">0</p>
-                    </div>
-                    <div class="card border-t-4 border-alerta">
-                        <h3 class="text-lg font-semibold mb-2">Frequência</h3>
-                        <p class="text-3xl font-bold text-alerta" id="valor-frequencia">0%</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAREFAS -->
-            <div id="conteudo-tarefa" class="conteudo-secao hidden">
-                <h2 class="text-2xl font-bold mb-5">📋 Tarefas</h2>
-                <div class="card mb-5">
-                    <h3 class="text-lg font-semibold mb-4">Nova Tarefa</h3>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <input type="text" id="titulo-tarefa" class="campo" placeholder="Título">
-                        <input type="number" id="tempo-tarefa" min="1" value="1" class="campo" placeholder="Tempo (min)">
-                        <input type="date" id="prazo-tarefa" class="campo">
-                    </div>
-                    <textarea id="descricao-tarefa" class="campo mt-3" rows="2" placeholder="Detalhes"></textarea>
-                    <button onclick="adicionarAtividade('tarefa')" class="btn-principal w-auto mt-4 px-6">Adicionar</button>
-                </div>
-                <div id="lista-tarefa" class="space-y-4"></div>
-            </div>
-
-            <!-- REDAÇÃO -->
-            <div id="conteudo-redacao" class="conteudo-secao hidden">
-                <h2 class="text-2xl font-bold mb-5">✍️ Redação</h2>
-                <div class="card mb-5">
-                    <h3 class="text-lg font-semibold mb-4">Nova Redação</h3>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <input type="text" id="titulo-redacao" class="campo" placeholder="Tema">
-                        <input type="number" id="tempo-redacao" min="1" value="1" class="campo" placeholder="Tempo (min)">
-                        <input type="date" id="prazo-redacao" class="campo">
-                    </div>
-                    <textarea id="texto-redacao" class="campo mt-3" rows="3" placeholder="Conteúdo"></textarea>
-                    <button onclick="adicionarAtividade('redacao')" class="btn-principal w-auto mt-4 px-6">Salvar</button>
-                </div>
-                <div id="lista-redacao" class="space-y-4"></div>
-            </div>
-
-            <!-- PLATAFORMAS -->
-            <div id="conteudo-plataformas" class="conteudo-secao hidden">
-                <h2 class="text-2xl font-bold mb-5">💻 Plataformas</h2>
-                <div class="grid md:grid-cols-3 gap-5 mb-8">
-                    <button onclick="mudarSubcategoria('matific')" class="card hover:shadow-md transition-shadow text-left border-t-4 border-matific">
-                        <h3 class="text-xl font-bold text-matific">Matific</h3>
-                        <p class="text-textoSuave mt-1">Matemática</p>
-                    </button>
-                    <button onclick="mudarSubcategoria('alura')" class="card hover:shadow-md transition-shadow text-left border-t-4 border-alura">
-                        <h3 class="text-xl font-bold text-alura">Alura</h3>
-                        <p class="text-textoSuave mt-1">Cursos</p>
-                    </button>
-                    <button onclick="mudarSubcategoria('speak')" class="card hover:shadow-md transition-shadow text-left border-t-4 border-speak">
-                        <h3 class="text-xl font-bold text-speak">Speak</h3>
-                        <p class="text-textoSuave mt-1">Inglês</p>
-                    </button>
-                </div>
-
-                <div id="conteudo-matific" class="hidden">
-                    <h3 class="text-xl font-semibold mb-4">Matific</h3>
-                    <div class="card mb-5">
-                        <div class="grid md:grid-cols-3 gap-4">
-                            <input type="text" id="titulo-matific" class="campo" placeholder="Atividade">
-                            <input type="number" id="tempo-matific" min="1" value="1" class="campo" placeholder="Tempo (min)">
-                            <input type="date" id="prazo-matific" class="campo">
-                        </div>
-                        <button onclick="adicionarAtividade('matific')" class="btn-principal w-auto mt-4 px-6">Adicionar</button>
-                    </div>
-                    <div id="lista-matific" class="space-y-4"></div>
-                </div>
-
-                <div id="conteudo-alura" class="hidden">
-                    <h3 class="text-xl font-semibold mb-4">Alura</h3>
-                    <div class="card mb-5">
-                        <div class="grid md:grid-cols-3 gap-4">
-                            <input type="text" id="titulo-alura" class="campo" placeholder="Aula/Curso">
-                            <input type="number" id="tempo-alura" min="1" value="1" class="campo" placeholder="Tempo (min)">
-                            <input type="date" id="prazo-alura" class="campo">
-                        </div>
-                        <button onclick="adicionarAtividade('alura')" class="btn-principal w-auto mt-4 px-6">Adicionar</button>
-                    </div>
-                    <div id="lista-alura" class="space-y-4"></div>
-                </div>
-
-                <div id="conteudo-speak" class="hidden">
-                    <h3 class="text-xl font-semibold mb-4">Speak</h3>
-                    <div class="card mb-5">
-                        <div class="grid md:grid-cols-3 gap-4">
-                            <input type="text" id="titulo-speak" class="campo" placeholder="Assunto">
-                            <input type="number" id="tempo-speak" min="1" value="1" class="campo" placeholder="Tempo (min)">
-                            <input type="date" id="prazo-speak" class="campo">
-                        </div>
-                        <button onclick="adicionarAtividade('speak')" class="btn-principal w-auto mt-4 px-6">Adicionar</button>
-                    </div>
-                    <div id="lista-speak" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- AGENDA -->
-            <div id="conteudo-agenda" class="conteudo-secao hidden">
-                <h2 class="text-2xl font-bold mb-5">📅 Agenda</h2>
-                <div class="card">
-                    <div id="lista-agenda" class="space-y-3"></div>
-                </div>
-            </div>
-
-            <!-- BOLETIM -->
-            <div id="conteudo-boletim" class="conteudo-secao hidden">
-                <h2 class="text-2xl font-bold mb-5">📊 Boletim</h2>
-                <div class="card overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="bg-destaque/5">
-                                <th class="text-left p-3 border-b">Disciplina</th>
-                                <th class="text-center p-3 border-b">1º Bim</th>
-                                <th class="text-center p-3 border-b">2º Bim</th>
-                                <th class="text-center p-3 border-b">3º Bim</th>
-                                <th class="text-center p-3 border-b">4º Bim</th>
-                                <th class="text-center p-3 border-b">Média</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabela-notas"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- PRESENÇA -->
-            <div id="conteudo-presenca" class="conteudo-secao hidden">
-                <h2 class="text-2xl font-bold mb-5">👤 Presença</h2>
-                <div class="card text-center">
-                    <p class="text-lg">Total de aulas: <span class="font-semibold" id="total-aulas">0</span></p>
-                    <p class="text-lg">Presenças: <span class="font-semibold text-sucesso" id="total-presencas">0</span></p>
-                    <p class="text-lg">Faltas: <span class="font-semibold text-erro" id="total-faltas">0</span></p>
-                    <div class="w-full bg-borda h-3 rounded-full mt-4">
-                        <div id="barra-frequencia" class="bg-destaque h-3 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 </div>
 
 <script>
-// ---------------- SISTEMA DE SINCRONIZAÇÃO EM TEMPO REAL ----------------
+// ---------------- VARIÁVEIS GERAIS ----------------
 let usuario = null;
 let cronometros = {};
 let intervaloSincronizacao = null;
-const TEMPO_SINCRONIZACAO = 3000; // Atualiza a cada 3 segundos
+const TEMPO_SINCRONIZACAO = 2500; // A cada 2,5 segundos
 
-// Funções de armazenamento e sincronização
+// ---------------- SINCRONIZAÇÃO ----------------
 function sincronizarDados() {
     if (!usuario) return;
-
-    // Salva localmente
     localStorage.setItem(`feizao_${usuario.ra}`, JSON.stringify(usuario));
-    localStorage.setItem("feizao_ativo", JSON.stringify({ ra: usuario.ra, ultimaAtualizacao: new Date().toISOString() }));
-
-    // Atualiza status
-    document.getElementById("status-sincronizacao").textContent = `✅ Sincronizado às ${new Date().toLocaleTimeString()}`;
-    document.getElementById("status-sincronizacao").className = "mt-2 text-xs text-sucesso font-medium";
-
-    // Atualiza todas as partes da interface
-    atualizarTudo();
-}
-
-function carregarDadosSincronizados() {
-    const sessaoAtiva = localStorage.getItem("feizao_ativo");
-    if (sessaoAtiva) {
-        const { ra } = JSON.parse(sessaoAtiva);
-        const dados = localStorage.getItem(`feizao_${ra}`);
-        if (dados) usuario = JSON.parse(dados);
-    }
+    localStorage.setItem("feizao_sessao", JSON.stringify({ ra: usuario.ra, ultima: new Date().toISOString() }));
+    document.getElementById("status-sincronizacao").textContent = `✅ Sincronizado ${new Date().toLocaleTimeString()}`;
+    atualizarTela();
 }
 
 function forcarSincronizacao() {
-    if (!usuario) return;
     document.getElementById("status-sincronizacao").textContent = "🔄 Atualizando...";
-    document.getElementById("status-sincronizacao").className = "mt-2 text-xs text-alerta font-medium";
-    setTimeout(sincronizarDados, 800);
+    setTimeout(sincronizarDados, 600);
 }
 
-function iniciarSincronizacaoAutomatica() {
+function iniciarSincronizacao() {
     if (intervaloSincronizacao) clearInterval(intervaloSincronizacao);
     intervaloSincronizacao = setInterval(sincronizarDados, TEMPO_SINCRONIZACAO);
 }
@@ -393,13 +364,52 @@ function pararSincronizacao() {
     if (intervaloSincronizacao) clearInterval(intervaloSincronizacao);
 }
 
-// ---------------- FUNÇÕES AUXILIARES ----------------
-function mostrarSenha() {
+// ---------------- PERSONALIZAÇÃO DE CORES ----------------
+function aplicarCores() {
+    const corP = document.getElementById("cor-principal").value;
+    const corF = document.getElementById("cor-fundo").value;
+    document.documentElement.style.setProperty('--cor-principal', corP);
+    document.documentElement.style.setProperty('--cor-principal-escura', escurecerCor(corP, 20));
+    document.documentElement.style.setProperty('--cor-fundo', corF);
+    if (usuario) {
+        usuario.config = usuario.config || {};
+        usuario.config.cores = { principal: corP, fundo: corF };
+        sincronizarDados();
+    }
+}
+
+function restaurarCores() {
+    document.getElementById("cor-principal").value = "#E50914";
+    document.getElementById("cor-fundo").value = "#F8F9FA";
+    aplicarCores();
+}
+
+function escurecerCor(cor, percentual) {
+    const r = parseInt(cor.slice(1,3),16);
+    const g = parseInt(cor.slice(3,5),16);
+    const b = parseInt(cor.slice(5,7),16);
+    const novoR = Math.max(0, Math.round(r * (100 - percentual)/100)).toString(16).padStart(2,'0');
+    const novoG = Math.max(0, Math.round(g * (100 - percentual)/100)).toString(16).padStart(2,'0');
+    const novoB = Math.max(0, Math.round(b * (100 - percentual)/100)).toString(16).padStart(2,'0');
+    return `#${novoR}${novoG}${novoB}`;
+}
+
+function carregarCoresSalvas() {
+    if (!usuario || !usuario.config?.cores) return;
+    const { principal, fundo } = usuario.config.cores;
+    document.getElementById("cor-principal").value = principal;
+    document.getElementById("cor-fundo").value = fundo;
+    document.documentElement.style.setProperty('--cor-principal', principal);
+    document.documentElement.style.setProperty('--cor-principal-escura', escurecerCor(principal, 20));
+    document.documentElement.style.setProperty('--cor-fundo', fundo);
+}
+
+// ---------------- LOGIN ----------------
+function alternarSenha() {
     const campo = document.getElementById("senha");
     campo.type = campo.type === "password" ? "text" : "password";
 }
 
-// ---------------- LOGIN ----------------
 async function fazerLogin() {
     const ra = document.getElementById("ra").value.trim();
     const digito = document.getElementById("digito-ra").value.trim() || "0";
@@ -409,86 +419,61 @@ async function fazerLogin() {
 
     if (!ra || !senha) {
         aviso.textContent = "Preencha todos os campos!";
-        aviso.className = "block p-3 mb-4 rounded-lg text-center text-sm bg-erro/10 text-erro";
+        aviso.className = "block p-2.5 mb-4 rounded bg-erro/10 text-erro text-center text-sm";
         return;
     }
 
-    aviso.textContent = "Conectando com a Sala do Futuro...";
-    aviso.className = "block p-3 mb-4 rounded-lg text-center text-sm bg-alerta/10 text-alerta";
+    aviso.textContent = "Conectando...";
+    aviso.className = "block p-2.5 mb-4 rounded bg-alerta/10 text-alerta text-center text-sm";
+    await new Promise(resolve => setTimeout(resolve, 800));
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Dados base sincronizados com a Sala do Futuro
     usuario = {
         ra: ra,
         digito: digito,
         uf: uf,
         senha: senha,
-        nome: "Aluno da Sala do Futuro",
-        serie: "9º Ano B",
-        escola: "Escola Estadual da Sala do Futuro",
-        frequencia: 92,
-        aulasTotais: 200,
-        presencas: 184,
-        faltas: 16,
-        atividades: { tarefa: [], redacao: [], matific: [], alura: [], speak: [] },
-        agenda: [
-            { id: 1, titulo: "Reunião de Pais", data: "20/06/2026", horario: "19h00" },
-            { id: 2, titulo: "Prova de Matemática", data: "25/06/2026", horario: "08h00" }
-        ],
-        boletim: [
-            { disciplina: "Língua Portuguesa", b1: 8.2, b2: 8.5, b3: 8.8, b4: 9.0, media: 8.6 },
-            { disciplina: "Matemática", b1: 7.8, b2: 8.0, b3: 8.4, b4: 8.7, media: 8.2 },
-            { disciplina: "Ciências", b1: 8.5, b2: 8.3, b3: 9.0, b4: 9.2, media: 8.7 },
-            { disciplina: "História", b1: 9.0, b2: 8.8, b3: 9.1, b4: 9.3, media: 9.1 },
-            { disciplina: "Geografia", b1: 8.7, b2: 8.9, b3: 8.5, b4: 9.0, media: 8.8 }
-        ]
+        nome: "Aluno",
+        serie: "8º Ano",
+        atividades: { tarefa: [], redacao: [] },
+        config: {}
     };
 
     const dadosSalvos = localStorage.getItem(`feizao_${ra}`);
     if (dadosSalvos) usuario = { ...usuario, ...JSON.parse(dadosSalvos) };
 
     abrirPainel();
-    iniciarSincronizacaoAutomatica();
+    iniciarSincronizacao();
+    carregarCoresSalvas();
     sincronizarDados();
 }
 
 function abrirPainel() {
     document.getElementById("tela-login").classList.add("hidden");
     document.getElementById("painel-principal").classList.remove("hidden");
-
-    document.getElementById("inicial-usuario").textContent = usuario.nome.charAt(0).toUpperCase();
-    document.getElementById("nome-usuario").textContent = usuario.nome;
-    document.getElementById("serie-turma").textContent = usuario.serie;
-    document.getElementById("escola").textContent = usuario.escola;
-    document.getElementById("nome-boas-vindas").textContent = usuario.nome.split(" ")[0];
-
-    atualizarTudo();
+    document.getElementById("inicial-nome").textContent = usuario.nome.charAt(0).toUpperCase();
+    document.getElementById("nome-aluno").textContent = usuario.nome;
+    document.getElementById("dados-aluno").textContent = usuario.serie;
 }
 
 // ---------------- NAVEGAÇÃO ----------------
-function mudarSecao(nome) {
-    document.querySelectorAll(".conteudo-secao").forEach(el => el.classList.add("hidden"));
+function mudarAba(nome) {
+    document.querySelectorAll(".conteudo-aba").forEach(el => el.classList.add("hidden"));
     document.querySelectorAll(".menu-item").forEach(el => el.classList.remove("menu-ativo"));
-
     document.getElementById(`conteudo-${nome}`).classList.remove("hidden");
-    document.getElementById(`menu-${nome}`).classList.add("menu-ativo");
+    document.getElementById(`aba-${nome}`)?.classList.add("menu-ativo");
+    if (nome === "personalizar") document.getElementById("conteudo-personalizar").classList.remove("hidden");
 }
 
-function mudarSubcategoria(nome) {
-    document.querySelectorAll("[id^='conteudo-'][id$='matific'], [id^='conteudo-'][id$='alura'], [id^='conteudo-'][id$='speak']").forEach(el => el.classList.add("hidden"));
-    document.getElementById(`conteudo-${nome}`).classList.remove("hidden");
+function abrirPersonalizacao() {
+    mudarAba("personalizar");
 }
 
-// ---------------- GERENCIAMENTO DE ATIVIDADES ----------------
-function adicionarAtividade(tipo) {
-    let titulo = document.getElementById(`titulo-${tipo}`).value.trim();
-    let tempo = parseInt(document.getElementById(`tempo-${tipo}`).value);
-    let prazo = document.getElementById(`prazo-${tipo}`).value || "";
-    let descricao = "";
-
-    if (tipo === "tarefa") descricao = document.getElementById("descricao-tarefa").value;
-    if (tipo === "redacao") descricao = document.getElementById("texto-redacao").value;
+// ---------------- GERENCIAMENTO DE TAREFAS E REDAÇÃO ----------------
+function adicionar(tipo) {
+    const titulo = document.getElementById(`titulo-${tipo}`).value.trim();
+    const tempo = parseInt(document.getElementById(`tempo-${tipo}`).value);
+    const prazo = document.getElementById(`prazo-${tipo}`).value || "";
+    const descricao = tipo === "tarefa" ? document.getElementById("descricao-tarefa").value : document.getElementById("texto-redacao").value;
 
     if (!titulo) return alert("Digite um título!");
     if (tempo < 1) return alert("Tempo mínimo é 1 minuto!");
@@ -520,133 +505,90 @@ function limparCampos(tipo) {
 function iniciarContagem(tipo, id) {
     const ativ = usuario.atividades[tipo].find(a => a.id === id);
     if (!ativ || ativ.status !== "pendente") return;
-
     ativ.inicio = Date.now();
     ativ.status = "andamento";
-
     cronometros[id] = setInterval(() => {
-        const decorrido = Math.floor((Date.now() - ativ.inicio) / 1000);
+        const decorrido = Math.floor((Date.now() - ativ.inicio)/1000);
         ativ.tempoRestante = Math.max(0, ativ.tempoTotal - decorrido);
-
         if (ativ.tempoRestante <= 0) {
             clearInterval(cronometros[id]);
             ativ.status = "pronto";
         }
-
         sincronizarDados();
     }, 1000);
 }
 
-function concluirAtividade(tipo, id) {
+function concluir(tipo, id) {
     const ativ = usuario.atividades[tipo].find(a => a.id === id);
     if (!ativ || ativ.status !== "pronto") return;
-
     ativ.status = "concluida";
     sincronizarDados();
 }
 
-// ---------------- ATUALIZAÇÃO GERAL ----------------
-function atualizarTudo() {
-    atualizarResumo();
-    atualizarListas();
-    atualizarBoletim();
-    atualizarPresenca();
-    atualizarAgenda();
+// ---------------- ATUALIZAÇÃO DE TELA ----------------
+function atualizarTela() {
+    const todas = [...usuario.atividades.tarefa, ...usuario.atividades.redacao];
+    document.getElementById("cont-pendentes").textContent = todas.filter(a => a.status !== "concluida").length;
+    document.getElementById("cont-concluidas").textContent = todas.filter(a => a.status === "concluida").length;
+    document.getElementById("cont-total").textContent = todas.length;
+    atualizarLista("tarefa");
+    atualizarLista("redacao");
 }
 
-function atualizarResumo() {
-    const todas = Object.values(usuario.atividades).flat();
-    document.getElementById("qtd-pendentes").textContent = todas.filter(a => a.status !== "concluida").length;
-    document.getElementById("qtd-concluidas").textContent = todas.filter(a => a.status === "concluida").length;
-    document.getElementById("valor-frequencia").textContent = `${usuario.frequencia}%`;
-}
-
-function atualizarListas() {
-    Object.keys(usuario.atividades).forEach(tipo => {
-        const container = document.getElementById(`lista-${tipo}`);
-        const itens = usuario.atividades[tipo];
-
-        if (!itens.length) {
-            container.innerHTML = `<div class="text-center py-6 text-textoSuave">Nenhuma atividade cadastrada</div>`;
-            return;
-        }
-
-        const cores = { tarefa: '#E50914', redacao: '#F59E0B', matific: '#2563EB', alura: '#7C3AED', speak: '#10B981' };
-        const icones = { tarefa: '📋', redacao: '✍️', matific: '➕', alura: '📘', speak: '🗣️' };
-
-        container.innerHTML = itens.map(ativ => {
-            const min = Math.floor(ativ.tempoRestante / 60);
-            const seg = ativ.tempoRestante % 60;
-            const tempo = `${min}:${seg.toString().padStart(2, "0")}`;
-
-            return `
-            <div class="card border-l-4" style="border-left-color: ${cores[tipo]}">
-                <div class="flex justify-between items-center flex-wrap gap-2">
-                    <div>
-                        <span class="mr-2">${icones[tipo]}</span>
-                        <span class="font-medium">${ativ.titulo}</span>
-                        ${ativ.prazo ? `<span class="text-xs text-textoSuave ml-2">Prazo: ${new Date(ativ.prazo).toLocaleDateString("pt-BR")}</span>` : ""}
-                    </div>
-                    <span class="text-sm ${ativ.status === "concluida" ? "text-sucesso" : ativ.status === "pronto" ? "text-alerta" : ativ.status === "andamento" ? "text-destaque" : "text-textoSuave"}">
-                        ${ativ.status === "pendente" ? "Aguardando" : ativ.status === "andamento" ? tempo : ativ.status === "pronto" ? "Finalizar" : "Concluída"}
-                    </span>
+function atualizarLista(tipo) {
+    const container = document.getElementById(`lista-${tipo}`);
+    const itens = usuario.atividades[tipo];
+    if (!itens.length) {
+        container.innerHTML = `<div class="p-4 text-center text-textoSuave">Nenhuma ${tipo === "tarefa" ? "tarefa cadastrada" : "redação salva"}</div>`;
+        return;
+    }
+    const icone = tipo === "tarefa" ? "📋" : "✍️";
+    container.innerHTML = itens.map(ativ => {
+        const min = Math.floor(ativ.tempoRestante / 60);
+        const seg = ativ.tempoRestante % 60;
+        const tempo = `${min}:${seg.toString().padStart(2, "0")}`;
+        return `
+        <div class="card border-l-4" style="border-left-color: var(--cor-principal)">
+            <div class="flex justify-between items-center flex-wrap gap-2">
+                <div>
+                    <span class="mr-2">${icone}</span>
+                    <span class="font-medium">${ativ.titulo}</span>
+                    ${ativ.prazo ? `<span class="text-xs text-textoSuave ml-2">Prazo: ${new Date(ativ.prazo).toLocaleDateString("pt-BR")}</span>` : ""}
                 </div>
-                <div class="mt-3 flex justify-end gap-2">
-                    ${ativ.status === "pendente" ? `<button onclick="iniciarContagem('${tipo}', ${ativ.id})" class="btn-principal text-xs py-1.5 px-3">Começar</button>` : ""}
-                    ${ativ.status === "pronto" ? `<button onclick="concluirAtividade('${tipo}', ${ativ.id})" class="bg-sucesso hover:bg-sucesso/90 text-white text-xs py-1.5 px-3 rounded">Confirmar</button>` : ""}
-                </div>
+                <span class="text-sm ${ativ.status === "concluida" ? "text-sucesso" : ativ.status === "pronto" ? "text-alerta" : ativ.status === "andamento" ? "text-destaque" : "text-textoSuave"}">
+                    ${ativ.status === "pendente" ? "Aguardando" : ativ.status === "andamento" ? tempo : ativ.status === "pronto" ? "Finalizar" : "Concluída"}
+                </span>
             </div>
-            `;
-        }).join("");
-    });
-}
-
-function atualizarBoletim() {
-    const corpo = document.getElementById("tabela-notas");
-    corpo.innerHTML = usuario.boletim.map(d => `
-        <tr class="hover:bg-destaque/5">
-            <td class="p-3 border-b border-borda">${d.disciplina}</td>
-            <td class="p-3 border-b border-borda text-center">${d.b1.toFixed(1)}</td>
-            <td class="p-3 border-b border-borda text-center">${d.b2.toFixed(1)}</td>
-            <td class="p-3 border-b border-borda text-center">${d.b3.toFixed(1)}</td>
-            <td class="p-3 border-b border-borda text-center">${d.b4.toFixed(1)}</td>
-            <td class="p-3 border-b border-borda text-center font-semibold ${d.media >= 7 ? "text-sucesso" : "text-erro"}">${d.media.toFixed(1)}</td>
-        </tr>
-    `).join("");
-}
-
-function atualizarPresenca() {
-    document.getElementById("total-aulas").textContent = usuario.aulasTotais;
-    document.getElementById("total-presencas").textContent = usuario.presencas;
-    document.getElementById("total-faltas").textContent = usuario.faltas;
-    document.getElementById("barra-frequencia").style.width = `${usuario.frequencia}%`;
-}
-
-function atualizarAgenda() {
-    const lista = document.getElementById("lista-agenda");
-    lista.innerHTML = usuario.agenda.map(item => `
-        <div class="p-3 rounded-lg bg-destaque/5 border border-borda">
-            <p class="font-medium">${item.titulo}</p>
-            <p class="text-sm text-textoSuave">${item.data} • ${item.horario}</p>
-        </div>
-    `).join("");
+            ${ativ.descricao ? `<p class="text-sm text-textoSuave mt-2">${ativ.descricao}</p>` : ""}
+            <div class="mt-3 flex justify-end gap-2">
+                ${ativ.status === "pendente" ? `<button onclick="iniciarContagem('${tipo}', ${ativ.id})" class="btn-principal text-xs py-1.5 px-3">Começar</button>` : ""}
+                ${ativ.status === "pronto" ? `<button onclick="concluir('${tipo}', ${ativ.id})" class="bg-sucesso hover:bg-sucesso/90 text-white text-xs py-1.5 px-3 rounded">Confirmar</button>` : ""}
+            </div>
+        </div>`;
+    }).join("");
 }
 
 function sair() {
     if (confirm("Deseja sair?")) {
         pararSincronizacao();
         usuario = null;
-        localStorage.removeItem("feizao_ativo");
+        localStorage.removeItem("feizao_sessao");
         location.reload();
     }
 }
 
 // ---------------- INICIALIZAÇÃO ----------------
 window.onload = () => {
-    carregarDadosSincronizados();
-    if (usuario) {
-        abrirPainel();
-        iniciarSincronizacaoAutomatica();
+    const sessao = localStorage.getItem("feizao_sessao");
+    if (sessao) {
+        const { ra } = JSON.parse(sessao);
+        const dados = localStorage.getItem(`feizao_${ra}`);
+        if (dados) {
+            usuario = JSON.parse(dados);
+            abrirPainel();
+            iniciarSincronizacao();
+            carregarCoresSalvas();
+        }
     }
 };
 </script>
