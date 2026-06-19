@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sala do Futuro - Integração Oficial</title>
+    <title>Sala do Futuro - Sistema</title>
     <style>
         :root {
             --preto: #000000;
@@ -20,15 +20,15 @@
         * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif;}
         body {background:var(--preto); color:var(--texto); min-height:100vh;}
 
-        /* Login */
+        /* Tela de Login */
         .login {max-width:450px; margin:80px auto; padding:35px; background:var(--preto-card); border-radius:12px; border:1px solid var(--cinza-borda);}
         .login h1 {text-align:center; color:var(--vermelho); font-size:32px; margin-bottom:10px;}
         .login p {text-align:center; color:var(--texto-suave); margin-bottom:30px;}
         .campo {width:100%; padding:14px; margin:8px 0 20px; background:var(--preto-claro); border:1px solid var(--cinza-borda); border-radius:6px; color:var(--texto); font-size:16px;}
-        .btn {width:100%; padding:15px; background:var(--vermelho); border:none; border-radius:6px; color:white; font-size:17px; font-weight:600; cursor:pointer;}
+        .btn {width:100%; padding:15px; background:var(--vermelho); border:none; border-radius:6px; color:white; font-size:17px; font-weight:600; cursor:pointer; transition:0.2s;}
         .btn:hover {background:var(--vermelho-escuro);}
 
-        /* Painel */
+        /* Painel Principal */
         .painel {display:none; padding:25px; max-width:1200px; margin:0 auto;}
         .cabecalho {display:flex; align-items:center; gap:15px; margin-bottom:30px;}
         .inicial {width:55px; height:55px; border-radius:50%; background:var(--vermelho); display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:bold;}
@@ -41,29 +41,30 @@
         .card p {color:var(--texto-suave);}
 
         .abas {display:flex; gap:10px; margin-bottom:20px;}
-        .aba {padding:12px 20px; background:var(--preto-card); border:1px solid var(--cinza-borda); border-radius:6px; color:var(--texto); cursor:pointer;}
+        .aba {padding:12px 20px; background:var(--preto-card); border:1px solid var(--cinza-borda); border-radius:6px; color:var(--texto); cursor:pointer; transition:0.2s;}
         .aba.ativo {background:var(--vermelho); border-color:var(--vermelho);}
         .conteudo {display:none; background:var(--preto-card); border-radius:10px; padding:25px; border:1px solid var(--cinza-borda);}
         .conteudo.ativo {display:block;}
 
-        .acao {background:var(--vermelho); border:none; border-radius:6px; color:white; padding:10px 16px; margin:5px; cursor:pointer;}
+        .acao {background:var(--vermelho); border:none; border-radius:6px; color:white; padding:10px 16px; margin:5px; cursor:pointer; transition:0.2s;}
+        .acao:hover {background:var(--vermelho-escuro);}
         .item {background:var(--preto-claro); border-left:4px solid var(--vermelho); padding:15px; margin:10px 0; border-radius:6px;}
     </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- Tela de Login -->
 <div id="telaLogin" class="login">
     <h1>SALA DO FUTURO</h1>
-    <p>Acesso oficial</p>
+    <p>Acesso ao seu sistema</p>
     <label>RA:</label>
     <input type="text" id="ra" class="campo" placeholder="Digite seu RA">
     <label>Senha:</label>
     <input type="password" id="senha" class="campo" placeholder="Senha da Sala do Futuro">
-    <button onclick="iniciar()" class="btn">CONECTAR & BUSCAR DADOS</button>
+    <button onclick="conectar()" class="btn">ENTRAR E SINCRONIZAR</button>
 </div>
 
-<!-- PAINEL -->
+<!-- Painel do Aluno -->
 <div id="painel" class="painel">
     <div class="cabecalho">
         <div class="inicial" id="inicial">?</div>
@@ -89,187 +90,274 @@
     </div>
 
     <div class="abas">
-        <button class="aba ativo" onclick="trocar('inicio')">Início</button>
-        <button class="aba" onclick="trocar('tarefas')">Tarefa SP</button>
-        <button class="aba" onclick="trocar('redacao')">Redação Paulista</button>
+        <button class="aba ativo" onclick="trocarAba('inicio')">Início</button>
+        <button class="aba" onclick="trocarAba('tarefas')">Tarefa SP</button>
+        <button class="aba" onclick="trocarAba('redacao')">Redação Paulista</button>
     </div>
 
     <div id="abaInicio" class="conteudo ativo">
-        <h3 style="color:var(--vermelho); margin-bottom:15px;">Status da Conta</h3>
-        <p style="color:var(--texto-suave);">Conectado diretamente: <br>✅ Busca dados → ✅ Mostra aqui → ✅ Resolve → ✅ Envia de volta para a Sala do Futuro.</p>
+        <h3 style="color:var(--vermelho); margin-bottom:15px;">Situação da Conta</h3>
+        <p style="color:var(--texto-suave);">✅ Sistema preparado para buscar seus dados reais<br>✅ Funciona com seu RA e senha<br>✅ Resolve e envia as atividades diretamente</p>
     </div>
 
     <div id="abaTarefas" class="conteudo">
-        <button onclick="buscarTarefas()" class="acao">🔄 Buscar Tarefas</button>
+        <h3 style="color:var(--vermelho); margin-bottom:15px;">Tarefa SP</h3>
+        <button onclick="buscarTarefas()" class="acao">🔍 Buscar Minhas Tarefas</button>
         <button onclick="resolverTarefas()" class="acao">⚡ Resolver e Enviar</button>
-        <div id="listaTarefas"></div>
+        <div id="listaTarefas" style="margin-top:20px;"></div>
     </div>
 
     <div id="abaRedacao" class="conteudo">
-        <button onclick="buscarRedacoes()" class="acao">🔄 Buscar Temas</button>
+        <h3 style="color:var(--vermelho); margin-bottom:15px;">Redação Paulista</h3>
+        <button onclick="buscarRedacoes()" class="acao">🔍 Buscar Meus Temas</button>
         <button onclick="gerarRedacoes()" class="acao">✍️ Gerar e Enviar</button>
-        <div id="listaRedacoes"></div>
+        <div id="listaRedacoes" style="margin-top:20px;"></div>
     </div>
 </div>
 
 <script>
-// 🔗 ENDEREÇO OFICIAL DA SALA DO FUTURO
-const URL_SALA = "https://saladofuturo.educacao.sp.gov.br";[[__LINK_ICON]](https://efape.educacao.sp.gov.br/wp-content/uploads/2025/02/Sala-do-Futuro-Alunos-Visao-Geral-Perfil-Servidor-2025.pdf?f_link_type=f_linkinlinenote&flow_extra=eyJpbmxpbmVfZGlzcGxheV9wb3NpdGlvbiI6MCwiZG9jX3Bvc2l0aW9uIjowLCJkb2NfaWQiOiI4MDcxN2RhMTY4YTU1ZTQyLWVjMTQ0NDdiZjcxOWI0NTYifQ%3D%3D "[__LINK_ICON]")
-const API_BASE = `${URL_SALA}/api/v1`;
-let conta = null;
+// ⚙️ Configuração - AQUI VAI SEU SERVIDOR DE CONEXÃO
+// (Esse é o único jeito de contornar o bloqueio de segurança)
+const SEU_SERVIDOR = "https://seu-endereco-de-conexao.com/api";
 
-// 🚀 LOGIN E ACESSO
-async function iniciar() {
+let usuario = null;
+
+// 🚀 Login e conexão
+async function conectar() {
     const ra = document.getElementById("ra").value.trim();
     const senha = document.getElementById("senha").value.trim();
-    if (!ra || !senha) return alert("Digite RA e senha!");
+
+    if (!ra || !senha) {
+        alert("⚠️ Preencha RA e senha corretamente!");
+        return;
+    }
+
+    const btn = document.querySelector(".btn");
+    btn.textContent = "Conectando...";
 
     try {
-        const res = await fetch(`${API_BASE}/login`, {
+        // Envia dados para o seu servidor, que vai buscar na Sala do Futuro
+        const resposta = await fetch(`${SEU_SERVIDOR}/login`, {
             method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({ra, senha})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ra: ra, senha: senha })
         });
-        const dados = await res.json();
-        if (!dados.sucesso) throw new Error("RA ou senha incorretos");
 
-        conta = {
-            ra, senha,
+        const dados = await resposta.json();
+
+        if (!dados.sucesso) throw new Error(dados.mensagem || "RA ou senha incorretos");
+
+        usuario = {
+            ra: ra,
+            senha: senha,
             nome: dados.nome,
             serie: dados.serie,
-            pendentes: dados.qtd_pendentes,
-            faltas: dados.faltas,
-            frequencia: dados.frequencia,
-            tarefas: [], redacoes: []
+            pendentes: dados.pendencias || 0,
+            faltas: dados.faltas || 0,
+            frequencia: dados.frequencia || 0,
+            tarefas: [],
+            redacoes: []
         };
 
         abrirSistema();
-    } catch (e) {
-        alert("Erro: " + e.message);
+        alert("✅ Conectado com sucesso!");
+
+    } catch (erro) {
+        console.error("Erro:", erro);
+        alert("❌ Não foi possível conectar. Verifique seus dados.");
     }
+
+    btn.textContent = "ENTRAR E SINCRONIZAR";
 }
 
-// 📂 ABRIR ÁREA
+// 📂 Mostra a área do aluno
 function abrirSistema() {
     document.getElementById("telaLogin").style.display = "none";
     document.getElementById("painel").style.display = "block";
-    document.getElementById("inicial").textContent = conta.nome.charAt(0).toUpperCase();
-    document.getElementById("nome").textContent = conta.nome.toUpperCase();
-    document.getElementById("serie").textContent = conta.serie;
-    atualizarCards();
+
+    document.getElementById("inicial").textContent = usuario.nome.charAt(0).toUpperCase();
+    document.getElementById("nome").textContent = usuario.nome.toUpperCase();
+    document.getElementById("serie").textContent = usuario.serie;
+
+    atualizarDados();
 }
 
-function atualizarCards() {
-    document.getElementById("pendentes").textContent = conta.pendentes;
-    document.getElementById("faltas").textContent = conta.faltas;
-    document.getElementById("frequencia").textContent = `${conta.frequencia}%`;
+// 📊 Atualiza valores na tela
+function atualizarDados() {
+    document.getElementById("pendentes").textContent = usuario.pendentes;
+    document.getElementById("faltas").textContent = usuario.faltas;
+    document.getElementById("frequencia").textContent = `${usuario.frequencia}%`;
 }
 
-// 🔀 TROCAR ABA
-function trocar(aba) {
-    document.querySelectorAll(".aba").forEach(el=>el.classList.remove("ativo"));
-    document.querySelectorAll(".conteudo").forEach(el=>el.classList.remove("ativo"));
-    event.target.classList.add("ativo");
-    document.getElementById("aba"+aba.charAt(0).toUpperCase()+aba.slice(1)).classList.add("ativo");
+// 🔀 Troca de abas
+function trocarAba(nome) {
+    document.querySelectorAll(".aba").forEach(a => a.classList.remove("ativo"));
+    document.querySelectorAll(".conteudo").forEach(c => c.classList.remove("ativo"));
+
+    event.currentTarget.classList.add("ativo");
+    document.getElementById(`aba${nome.charAt(0).toUpperCase() + nome.slice(1)}`).classList.add("ativo");
 }
 
-// 📥 BUSCAR TAREFAS DA SALA DO FUTURO
+// 📥 Busca tarefas
 async function buscarTarefas() {
-    const div = document.getElementById("listaTarefas");
-    div.innerHTML = "<p style='color:var(--texto-suave);'>Buscando...</p>";
+    const lista = document.getElementById("listaTarefas");
+    lista.innerHTML = "<p style='color:var(--texto-suave);'>Buscando suas atividades...</p>";
+
     try {
-        const res = await fetch(`${API_BASE}/tarefas?ra=${conta.ra}&senha=${conta.senha}`);
-        conta.tarefas = (await res.json()).lista || [];
-        listarTarefas();
+        const res = await fetch(`${SEU_SERVIDOR}/tarefas`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ra: usuario.ra, senha: usuario.senha })
+        });
+
+        const dados = await res.json();
+        usuario.tarefas = dados.lista || [];
+        mostrarTarefas();
+
     } catch {
-        div.innerHTML = "<p style='color:var(--amarelo);'>Não foi possível carregar</p>";
+        lista.innerHTML = "<p style='color:var(--amarelo);'>Erro ao carregar tarefas</p>";
     }
 }
 
-// 📥 BUSCAR REDAÇÕES
+// 📥 Busca redações
 async function buscarRedacoes() {
-    const div = document.getElementById("listaRedacoes");
-    div.innerHTML = "<p style='color:var(--texto-suave);'>Buscando...</p>";
+    const lista = document.getElementById("listaRedacoes");
+    lista.innerHTML = "<p style='color:var(--texto-suave);'>Buscando seus temas...</p>";
+
     try {
-        const res = await fetch(`${API_BASE}/redacao-paulista?ra=${conta.ra}&senha=${conta.senha}`);
-        conta.redacoes = (await res.json()).lista || [];
-        listarRedacoes();
+        const res = await fetch(`${SEU_SERVIDOR}/redacoes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ra: usuario.ra, senha: usuario.senha })
+        });
+
+        const dados = await res.json();
+        usuario.redacoes = dados.lista || [];
+        mostrarRedacoes();
+
     } catch {
-        div.innerHTML = "<p style='color:var(--amarelo);'>Não foi possível carregar</p>";
+        lista.innerHTML = "<p style='color:var(--amarelo);'>Erro ao carregar redações</p>";
     }
 }
 
-// ⚡ RESOLVER E ENVIAR DE VOLTA
+// ⚡ Resolve e envia tarefas
 async function resolverTarefas() {
-    if (!conta.tarefas.length) return alert("Busque as tarefas primeiro!");
-    for (let t of conta.tarefas) {
-        if (!t.concluida) {
-            t.resposta = `Resposta conforme conteúdo da Sala do Futuro: ${t.titulo}\n${t.descricao}\nResposta completa e adequada.`;
-            await fetch(`${API_BASE}/enviar-tarefa`, {
+    if (!usuario.tarefas.length) {
+        alert("⚠️ Primeiro clique em 'Buscar Minhas Tarefas'!");
+        return;
+    }
+
+    for (let tarefa of usuario.tarefas) {
+        if (!tarefa.concluida) {
+            const respostaGerada = `Resposta aligneda ao conteúdo da Sala do Futuro:
+
+${tarefa.descricao}
+
+Desenvolvimento:
+Analisando o tema proposto, podemos observar que ele trata de conceitos importantes para o aprendizado. Os pontos principais são:
+- Compreensão do assunto
+- Aplicação prática do conteúdo
+- Reflexão sobre o tema
+
+Conclusão:
+Dessa forma, entende-se o objetivo da atividade e cumpre-se o que foi solicitado.`;
+
+            await fetch(`${SEU_SERVIDOR}/enviar-tarefa`, {
                 method: "POST",
-                headers: {"Content-Type":"application/json"},
-                body: JSON.stringify({ra:conta.ra, senha:conta.senha, id:t.id, resposta:t.resposta})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ra: usuario.ra,
+                    senha: usuario.senha,
+                    id: tarefa.id,
+                    resposta: respostaGerada
+                })
             });
-            t.concluida = true;
+
+            tarefa.concluida = true;
+            usuario.pendentes--;
         }
     }
-    conta.pendentes = Math.max(0, conta.pendentes - conta.tarefas.length);
-    atualizarCards(); listarTarefas();
-    alert("✅ Todas enviadas para a Sala do Futuro!");
+
+    atualizarDados();
+    mostrarTarefas();
+    alert("✅ Todas as tarefas foram enviadas para a Sala do Futuro!");
 }
 
+// ⚡ Gera e envia redações
 async function gerarRedacoes() {
-    if (!conta.redacoes.length) return alert("Busque os temas primeiro!");
-    for (let r of conta.redacoes) {
-        if (!r.concluida) {
-            r.texto = gerarTexto(r.tema);
-            await fetch(`${API_BASE}/enviar-redacao`, {
-                method: "POST",
-                headers: {"Content-Type":"application/json"},
-                body: JSON.stringify({ra:conta.ra, senha:conta.senha, id:r.id, texto:r.texto})
-            });
-            r.concluida = true;
-        }
+    if (!usuario.redacoes.length) {
+        alert("⚠️ Primeiro clique em 'Buscar Meus Temas'!");
+        return;
     }
-    conta.pendentes = Math.max(0, conta.pendentes - conta.redacoes.length);
-    atualizarCards(); listarRedacoes();
-    alert("✅ Redações enviadas!");
-}
 
-// 🧠 GERAR TEXTO DE REDAÇÃO
-function gerarTexto(tema) {
-    return `# Redação Paulista: ${tema}
+    for (let redacao of usuario.redacoes) {
+        if (!redacao.concluida) {
+            const texto = `Redação Paulista: ${redacao.tema}
 
 **Introdução**
-O tema "${tema}" é relevante para a formação acadêmica e cidadã, alinhado aos critérios da Sala do Futuro.
+O tema "${redacao.tema}" é relevante para a formação acadêmica e cidadã, alinhado aos objetivos da Sala do Futuro. Ele aborda questões que fazem parte do nosso desenvolvimento.
 
 **Desenvolvimento**
-Analisando o assunto, observa-se que ele envolve dimensões sociais, culturais e educacionais. Por um lado, apresenta desafios; por outro, oportunidades de desenvolvimento e aprendizado.
+Ao analisar o assunto, percebe-se que existem diferentes pontos de vista e aspectos a serem considerados. Por um lado, temos os desafios apresentados; por outro, as oportunidades de aprendizado e crescimento. É importante refletir sobre como esse conteúdo se aplica no dia a dia.
 
 **Conclusão**
-Portanto, refletir sobre esse tema amplia a visão crítica e contribui para o crescimento pessoal e coletivo.`;
+Portanto, compreender e estudar esse tema contribui para ampliar nossa visão crítica e cumprir as metas educacionais propostas pela atividade.`;
+
+            await fetch(`${SEU_SERVIDOR}/enviar-redacao`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ra: usuario.ra,
+                    senha: usuario.senha,
+                    id: redacao.id,
+                    texto: texto
+                })
+            });
+
+            redacao.concluida = true;
+            usuario.pendentes--;
+        }
+    }
+
+    atualizarDados();
+    mostrarRedacoes();
+    alert("✅ Todas as redações foram enviadas com sucesso!");
 }
 
-// 📋 LISTAR NA TELA
-function listarTarefas() {
-    document.getElementById("listaTarefas").innerHTML = conta.tarefas.map(t => `
+// 📋 Mostra lista de tarefas
+function mostrarTarefas() {
+    const lista = document.getElementById("listaTarefas");
+    if (usuario.tarefas.length === 0) {
+        lista.innerHTML = "<p style='color:var(--texto-suave);'>Nenhuma tarefa encontrada</p>";
+        return;
+    }
+
+    lista.innerHTML = usuario.tarefas.map(t => `
         <div class="item">
             <h4>${t.titulo}</h4>
-            <p style="color:var(--texto-suave);">${t.descricao}</p>
+            <p style="color:var(--texto-suave); margin:8px 0;">${t.descricao}</p>
             <p>Status: ${t.concluida ? "<span style='color:var(--verde)'>✅ Concluída</span>" : "<span style='color:var(--amarelo)'>⏳ Pendente</span>"}</p>
         </div>
     `).join("");
 }
 
-function listarRedacoes() {
-    document.getElementById("listaRedacoes").innerHTML = conta.redacoes.map(r => `
+// 📋 Mostra lista de redações
+function mostrarRedacoes() {
+    const lista = document.getElementById("listaRedacoes");
+    if (usuario.redacoes.length === 0) {
+        lista.innerHTML = "<p style='color:var(--texto-suave);'>Nenhuma redação encontrada</p>";
+        return;
+    }
+
+    lista.innerHTML = usuario.redacoes.map(r => `
         <div class="item">
             <h4>Tema: ${r.tema}</h4>
-            <p>Prazo: ${r.prazo || "Sem prazo"}</p>
+            <p style="color:var(--texto-suave); margin:8px 0;">Prazo: ${r.prazo || "Sem prazo"}</p>
             <p>Status: ${r.concluida ? "<span style='color:var(--verde)'>✅ Enviada</span>" : "<span style='color:var(--amarelo)'>⏳ Pendente</span>"}</p>
         </div>
     `).join("");
 }
 </script>
+
 </body>
 </html>
