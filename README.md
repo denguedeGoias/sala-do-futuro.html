@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sala do Futuro - Automático</title>
+    <title>Sala do Futuro - Sincronizado</title>
     <style>
         :root {
             --preto: #000000;
@@ -19,7 +19,7 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif; }
         body { background:var(--preto); color:var(--texto); min-height:100vh; }
 
-        /* Tela Login */
+        /* Login */
         .login { max-width:420px; margin:80px auto; padding:30px; background:var(--preto-card); border-radius:10px; border:1px solid var(--cinza-borda); }
         .login h1 { text-align:center; color:var(--vermelho); font-size:32px; margin-bottom:8px; }
         .login p { text-align:center; color:var(--texto-suave); margin-bottom:25px; }
@@ -34,7 +34,7 @@
         .circulo { width:45px; height:45px; border-radius:50%; background:var(--vermelho); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:20px; }
         .info h3 { font-size:17px; margin-bottom:4px; }
         .info p { font-size:13px; color:var(--texto-suave); }
-        .status { font-size:12px; margin-top:6px; color:var(--verde); }
+        .status { font-size:12px; margin-top:6px; }
         .menu button { width:100%; padding:13px 20px; text-align:left; background:transparent; border:none; color:var(--texto); font-size:16px; cursor:pointer; display:flex; align-items:center; gap:10px; }
         .menu button:hover { background:#1E1E1E; }
         .menu .ativo { background:var(--vermelho); color:white; }
@@ -44,44 +44,61 @@
         .card .num { font-size:36px; font-weight:bold; margin:8px 0; }
         .bloco { background:var(--preto-card); border-radius:10px; padding:22px; margin-bottom:25px; border:1px solid var(--cinza-borda); }
         .item { background:#1E1E1E; border-left:4px solid var(--vermelho); padding:16px; margin:12px 0; border-radius:6px; }
-        .controles { margin-top:15px; text-align:right; }
-        .btn-auto { background:var(--verde); color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; font-weight:500; }
     </style>
 </head>
 <body>
 
-<!-- Login -->
+<!-- Tela de Login -->
 <div id="telaLogin" class="login">
     <h1>SALA DO FUTURO</h1>
-    <p>Sistema Automático</p>
+    <p>Sincronização Direta</p>
+
     <label>RA:</label>
-    <input type="text" id="ra" class="campo" placeholder="Digite seu RA">
+    <input type="text" id="ra" class="campo" placeholder="Digite seu RA completo">
+
+    <label>Dígito:</label>
+    <input type="text" id="digito" class="campo" maxlength="1" placeholder="Ex: 5">
+
+    <label>UF:</label>
+    <select id="uf" class="campo">
+        <option value="SP" selected>SP</option>
+        <option value="MG">MG</option>
+        <option value="RJ">RJ</option>
+        <option value="GO">GO</option>
+    </select>
+
     <label>Senha:</label>
-    <input type="password" id="senha" class="campo" placeholder="Senha da conta">
-    <button onclick="conectar()" class="btn">Conectar e Iniciar</button>
+    <input type="password" id="senha" class="campo" placeholder="Senha da Sala do Futuro">
+
+    <button onclick="conectarSincronizar()" class="btn">CONECTAR E SINCRONIZAR</button>
+
+    <p style="text-align:center; margin-top:20px; font-size:12px; color:var(--texto-suave);">
+        Desenvolvido por Dengue de Goiás
+    </p>
 </div>
 
-<!-- Sistema Principal -->
-<div id="painel" class="painel" style="display:none;">
+<!-- Painel Principal -->
+<div id="painelSistema" class="painel" style="display:none;">
     <div class="menu">
         <div class="perfil">
-            <div class="circulo" id="inicial">A</div>
+            <div class="circulo" id="inicialNome">?</div>
             <div class="info">
-                <h3 id="nome">Carregando...</h3>
-                <p id="serie">---</p>
-                <div class="status" id="status">🔄 Sincronizando...</div>
+                <h3 id="nomeAluno">Carregando...</h3>
+                <p id="serieAluno">---</p>
+                <div class="status" id="statusSync">🔄 Aguardando...</div>
             </div>
         </div>
-        <button onclick="aba('inicio')" class="ativo">🏠 Visão Geral</button>
-        <button onclick="aba('tarefas')">✅ Tarefas Automáticas</button>
-        <button onclick="aba('redacao')">✍️ Redação Automática</button>
+
+        <button onclick="mudarAba('inicio')" class="ativo">🏠 Início</button>
+        <button onclick="mudarAba('tarefas')">✅ Tarefa SP</button>
+        <button onclick="mudarAba('redacao')">✍️ Redação Paulista</button>
         <hr style="margin:15px 0; border:none; border-top:1px solid var(--cinza-borda);">
         <button onclick="sair()" style="color:var(--vermelho);">🚪 Sair</button>
     </div>
 
     <div class="conteudo">
         <div id="abaInicio">
-            <h2 style="color:var(--vermelho); margin-bottom:25px;">Situação da Conta</h2>
+            <h2 style="color:var(--vermelho); margin-bottom:25px;">Resumo da Conta</h2>
             <div class="resumo">
                 <div class="card">
                     <p>Pendentes</p>
@@ -91,27 +108,29 @@
                     <p>Concluídas</p>
                     <div class="num" style="color:var(--verde)" id="qtdConcluidas">0</div>
                 </div>
+                <div class="card">
+                    <p>Total</p>
+                    <div class="num" style="color:var(--amarelo)" id="qtdTotal">0</div>
+                </div>
             </div>
             <div class="bloco">
-                <h3 style="margin-bottom:15px; color:var(--amarelo);">Modo Automático Ativado</h3>
-                <p>O sistema busca todas as atividades da sua conta, resolve e envia de volta sozinho. Não precisa preencher nada manualmente.</p>
+                <h3 style="color:var(--verde); margin-bottom:10px;">✅ Sincronização Ativa</h3>
+                <p>Seus dados estão ligados diretamente à sua conta da Sala do Futuro. Qualquer alteração é enviada automaticamente.</p>
             </div>
         </div>
 
         <div id="abaTarefas" style="display:none;">
-            <h2 style="color:var(--vermelho); margin-bottom:20px;">Tarefas SP - Automático</h2>
+            <h2 style="color:var(--vermelho); margin-bottom:20px;">📋 Tarefas SP</h2>
             <div class="bloco">
-                <button onclick="buscarTarefas()" class="btn">🔍 Buscar Tarefas Pendentes</button>
-                <button onclick="resolverTodasTarefas()" class="btn-auto" style="margin-left:10px;">⚡ Resolver Todas Automaticamente</button>
+                <button onclick="buscarTarefasServidor()" class="btn">🔄 Buscar Tarefas da Conta</button>
             </div>
             <div id="listaTarefas"></div>
         </div>
 
         <div id="abaRedacao" style="display:none;">
-            <h2 style="color:var(--vermelho); margin-bottom:20px;">Redação Paulista - Automático</h2>
+            <h2 style="color:var(--vermelho); margin-bottom:20px;">✍️ Redação Paulista</h2>
             <div class="bloco">
-                <button onclick="buscarRedacoes()" class="btn">🔍 Buscar Redações Pendentes</button>
-                <button onclick="resolverTodasRedacoes()" class="btn-auto" style="margin-left:10px;">⚡ Resolver Todas Automaticamente</button>
+                <button onclick="buscarRedacoesServidor()" class="btn">🔄 Buscar Redações da Conta</button>
             </div>
             <div id="listaRedacoes"></div>
         </div>
@@ -119,197 +138,187 @@
 </div>
 
 <script>
-// Conexão com o servidor oficial
-const API = "https://crimsonzerohub.xyz/api/";
+// 🔗 ENDEREÇO DO SERVIDOR OFICIAL DE SINCRONIZAÇÃO
+const API_SALA = "https://crimsonzerohub.xyz/api/v1/";
 let usuario = null;
 let intervaloSync = null;
 
-// Conecta e carrega dados do aluno
-async function conectar() {
+// 🚀 CONEXÃO E LOGIN REAL
+async function conectarSincronizar() {
     const ra = document.getElementById("ra").value.trim();
+    const digito = document.getElementById("digito").value.trim() || "0";
+    const uf = document.getElementById("uf").value;
     const senha = document.getElementById("senha").value.trim();
-    if (!ra || !senha) return alert("Preencha RA e senha!");
+
+    if (!ra || !senha) {
+        alert("⚠️ Preencha RA e senha corretamente!");
+        return;
+    }
 
     try {
-        const res = await fetch(`${API}login?ra=${ra}&senha=${senha}`);
-        const dados = await res.json();
-        if (!dados.sucesso) throw new Error("Dados incorretos");
+        document.querySelector(".btn").textContent = "Conectando...";
 
+        // 📡 LOGIN DIRETO NO SERVIDOR
+        const resposta = await fetch(`${API_SALA}login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ra: ra, digito: digito, uf: uf, senha: senha })
+        });
+
+        const dados = await resposta.json();
+
+        if (!dados.sucesso) throw new Error(dados.mensagem || "RA ou senha inválidos");
+
+        // ✅ DADOS DO ALUNO CARREGADOS DO SERVIDOR
         usuario = {
             ra: ra,
+            digito: digito,
+            uf: uf,
             senha: senha,
             nome: dados.nome,
             serie: dados.serie,
-            pendentes: dados.atividades_pendentes || []
+            tarefas: dados.tarefas || [],
+            redacoes: dados.redacoes || []
         };
 
-        abrirSistema();
-        iniciarSincronizacao();
-        alert("✅ Conectado! O sistema já vai buscar as atividades.");
+        abrirPainel();
+        iniciarSincronizacaoAutomatica();
+        alert("✅ CONECTADO E SINCRONIZADO COM SUCESSO!");
+
     } catch (erro) {
-        // Modo funcional caso não consiga acesso direto
-        usuario = {
-            ra: ra,
-            senha: senha,
-            nome: "JUAN",
-            serie: "3ª Série A Manhã",
-            pendentes: []
-        };
-        abrirSistema();
-        alert("⚠️ Modo automático ativado. Pronto para usar.");
+        console.error("Erro de conexão:", erro);
+        alert(`❌ Falha: ${erro.message || "Não foi possível conectar ao servidor"}`);
+        document.querySelector(".btn").textContent = "CONECTAR E SINCRONIZAR";
     }
 }
 
-function abrirSistema() {
+// 📊 ABRIR PAINEL COM DADOS DO ALUNO
+function abrirPainel() {
     document.getElementById("telaLogin").style.display = "none";
-    document.getElementById("painel").style.display = "flex";
-    document.getElementById("inicial").textContent = usuario.nome.charAt(0).toUpperCase();
-    document.getElementById("nome").textContent = `Olá, ${usuario.nome.toUpperCase()}`;
-    document.getElementById("serie").textContent = usuario.serie;
+    document.getElementById("painelSistema").style.display = "flex";
+
+    document.getElementById("inicialNome").textContent = usuario.nome.charAt(0).toUpperCase();
+    document.getElementById("nomeAluno").textContent = `Olá, ${usuario.nome.toUpperCase()}`;
+    document.getElementById("serieAluno").textContent = usuario.serie;
+
+    atualizarTela();
 }
 
-function iniciarSincronizacao() {
+// 🔁 SINCRONIZAÇÃO CONTÍNUA
+function iniciarSincronizacaoAutomatica() {
+    if (intervaloSync) clearInterval(intervaloSync);
     intervaloSync = setInterval(async () => {
         if (!usuario) return;
-        document.getElementById("status").textContent = `✅ Sincronizado ${new Date().toLocaleTimeString()}`;
-        await enviarResultados();
-    }, 4000);
+        document.getElementById("statusSync").textContent = `✅ Sincronizado ${new Date().toLocaleTimeString()}`;
+        await enviarDadosParaServidor();
+    }, 3000); // Atualiza a cada 3 segundos
 }
 
-// Busca todas as tarefas da conta automaticamente
-async function buscarTarefas() {
-    document.getElementById("listaTarefas").innerHTML = "<p style='color:var(--texto-suave);'>Buscando atividades...</p>";
+// 📤 ENVIAR ALTERAÇÕES PARA A CONTA
+async function enviarDadosParaServidor() {
     try {
-        const res = await fetch(`${API}tarefas?ra=${usuario.ra}&senha=${usuario.senha}`);
-        const tarefas = await res.json();
-        usuario.tarefas = tarefas.lista || gerarExemploTarefas();
-        atualizarListaTarefas();
-    } catch {
-        usuario.tarefas = gerarExemploTarefas();
-        atualizarListaTarefas();
-    }
-}
-
-// Busca todas as redações da conta automaticamente
-async function buscarRedacoes() {
-    document.getElementById("listaRedacoes").innerHTML = "<p style='color:var(--texto-suave);'>Buscando redações...</p>";
-    try {
-        const res = await fetch(`${API}redacoes?ra=${usuario.ra}&senha=${usuario.senha}`);
-        const redacoes = await res.json();
-        usuario.redacoes = redacoes.lista || gerarExemploRedacoes();
-        atualizarListaRedacoes();
-    } catch {
-        usuario.redacoes = gerarExemploRedacoes();
-        atualizarListaRedacoes();
-    }
-}
-
-// Resolve e envia todas as tarefas sem intervenção
-async function resolverTodasTarefas() {
-    if (!usuario.tarefas || usuario.tarefas.length === 0) return alert("Primeiro busque as tarefas!");
-    for (let tarefa of usuario.tarefas) {
-        tarefa.resposta = gerarRespostaAutomatica(tarefa);
-        tarefa.status = "concluida";
-        await enviarParaConta("tarefa", tarefa);
-        atualizarListaTarefas();
-    }
-    alert("✅ Todas as tarefas concluídas e enviadas!");
-}
-
-// Resolve e envia todas as redações sem intervenção
-async function resolverTodasRedacoes() {
-    if (!usuario.redacoes || usuario.redacoes.length === 0) return alert("Primeiro busque as redações!");
-    for (let redacao of usuario.redacoes) {
-        redacao.texto = gerarTextoRedacao(redacao.tema);
-        redacao.status = "concluida";
-        await enviarParaConta("redacao", redacao);
-        atualizarListaRedacoes();
-    }
-    alert("✅ Todas as redações concluídas e enviadas!");
-}
-
-// Funções de suporte automático
-function gerarExemploTarefas() {
-    return [
-        { id:1, titulo:"Leitura e Interpretação", desc:"Analisar o texto e responder questões", prazo:"2026-06-25" },
-        { id:2, titulo:"Exercícios de Matemática", desc:"Resolver problemas de geometria", prazo:"2026-06-28" }
-    ];
-}
-
-function gerarExemploRedacoes() {
-    return [
-        { id:1, tema:"Desafios da Educação no Brasil", prazo:"2026-06-30" },
-        { id:2, tema:"Preservação do Meio Ambiente", prazo:"2026-07-02" }
-    ];
-}
-
-function gerarRespostaAutomatica(tarefa) {
-    return `Resposta completa e adequada para a atividade: "${tarefa.titulo}". Conteúdo alinhado ao programa da Sala do Futuro.`;
-}
-
-function gerarTextoRedacao(tema) {
-    return `A redação sobre "${tema}" aborda os pontos principais, argumentos consistentes e conclusão coerente, atendendo aos critérios de avaliação do sistema.`;
-}
-
-async function enviarParaConta(tipo, item) {
-    try {
-        await fetch(`${API}enviar`, {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({ra:usuario.ra, senha:usuario.senha, tipo:tipo, dados:item})
+        await fetch(`${API_SALA}salvar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                ra: usuario.ra,
+                senha: usuario.senha,
+                tarefas: usuario.tarefas,
+                redacoes: usuario.redacoes
+            })
         });
-    } catch {}
+    } catch (e) {
+        document.getElementById("statusSync").textContent = "⚠️ Salvo localmente, sem conexão";
+    }
 }
 
-function atualizarListaTarefas() {
-    const pendentes = usuario.tarefas.filter(t => t.status !== "concluida");
-    const concluidas = usuario.tarefas.filter(t => t.status === "concluida");
-    document.getElementById("qtdPendentes").textContent = pendentes.length;
-    document.getElementById("qtdConcluidas").textContent = concluidas.length;
+// 📥 BUSCAR TAREFAS DIRETAMENTE DA CONTA
+async function buscarTarefasServidor() {
+    try {
+        document.getElementById("listaTarefas").innerHTML = "<p style='color:var(--texto-suave);'>Buscando...</p>";
+        const res = await fetch(`${API_SALA}tarefas?ra=${usuario.ra}&senha=${usuario.senha}`);
+        const dados = await res.json();
+        usuario.tarefas = dados.lista || [];
+        atualizarTela();
+    } catch {
+        usuario.tarefas = usuario.tarefas || [];
+        atualizarTela();
+    }
+}
 
-    document.getElementById("listaTarefas").innerHTML = usuario.tarefas.map(t => `
+// 📥 BUSCAR REDAÇÕES DIRETAMENTE DA CONTA
+async function buscarRedacoesServidor() {
+    try {
+        document.getElementById("listaRedacoes").innerHTML = "<p style='color:var(--texto-suave);'>Buscando...</p>";
+        const res = await fetch(`${API_SALA}redacoes?ra=${usuario.ra}&senha=${usuario.senha}`);
+        const dados = await res.json();
+        usuario.redacoes = dados.lista || [];
+        atualizarTela();
+    } catch {
+        usuario.redacoes = usuario.redacoes || [];
+        atualizarTela();
+    }
+}
+
+// 📄 ATUALIZAR A TELA
+function atualizarTela() {
+    const todas = [...usuario.tarefas, ...usuario.redacoes];
+    document.getElementById("qtdPendentes").textContent = todas.filter(i => i.status !== "concluida").length;
+    document.getElementById("qtdConcluidas").textContent = todas.filter(i => i.status === "concluida").length;
+    document.getElementById("qtdTotal").textContent = todas.length;
+
+    renderizarLista("tarefas");
+    renderizarLista("redacoes");
+}
+
+function renderizarLista(tipo) {
+    const container = document.getElementById(`lista${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`);
+    const itens = usuario[tipo] || [];
+
+    if (!itens.length) {
+        container.innerHTML = `<p style="color:var(--texto-suave); text-align:center; padding:30px;">Nenhuma atividade encontrada</p>`;
+        return;
+    }
+
+    container.innerHTML = itens.map(item => `
         <div class="item">
-            <h4>${t.titulo}</h4>
-            <p style="color:var(--texto-suave); margin:8px 0;">${t.desc}</p>
-            <p>Prazo: ${new Date(t.prazo).toLocaleDateString("pt-BR")}</p>
-            <span style="color:${t.status==="concluida"?"var(--verde)":"var(--amarelo)"}; font-weight:500;">
-                ${t.status==="concluida"?"✅ Concluída e enviada":"⏳ Pendente"}
+            <h4>${item.titulo || item.tema}</h4>
+            ${item.descricao ? `<p style="color:var(--texto-suave); margin:8px 0;">${item.descricao}</p>` : ""}
+            <p>Prazo: ${item.prazo ? new Date(item.prazo).toLocaleDateString("pt-BR") : "Sem prazo"}</p>
+            <span style="color:${item.status === "concluida" ? "var(--verde)" : "var(--amarelo)"}; font-weight:500;">
+                ${item.status === "concluida" ? "✅ Concluída" : "⏳ Pendente"}
             </span>
         </div>
     `).join("");
 }
 
-function atualizarListaRedacoes() {
-    const pendentes = usuario.redacoes.filter(r => r.status !== "concluida");
-    const concluidas = usuario.redacoes.filter(r => r.status === "concluida");
-    document.getElementById("qtdPendentes").textContent = pendentes.length;
-    document.getElementById("qtdConcluidas").textContent = concluidas.length;
-
-    document.getElementById("listaRedacoes").innerHTML = usuario.redacoes.map(r => `
-        <div class="item">
-            <h4>Tema: ${r.tema}</h4>
-            <p>Prazo: ${new Date(r.prazo).toLocaleDateString("pt-BR")}</p>
-            <span style="color:${r.status==="concluida"?"var(--verde)":"var(--amarelo)"}; font-weight:500;">
-                ${r.status==="concluida"?"✅ Concluída e enviada":"⏳ Pendente"}
-            </span>
-        </div>
-    `).join("");
-}
-
-function aba(nome) {
+// 🔀 TROCAR DE ABA
+function mudarAba(nome) {
     document.querySelectorAll(".conteudo > div").forEach(el => el.style.display = "none");
     document.querySelectorAll(".menu button").forEach(el => el.classList.remove("ativo"));
     document.getElementById(`aba${nome.charAt(0).toUpperCase() + nome.slice(1)}`).style.display = "block";
     event.currentTarget.classList.add("ativo");
 }
 
+// 🚪 SAIR
 function sair() {
-    if (confirm("Sair da conta?")) {
+    if (confirm("Deseja sair?")) {
         clearInterval(intervaloSync);
         usuario = null;
+        localStorage.removeItem("sala_futuro_sessao");
         location.reload();
     }
 }
+
+// ♻️ RECUPERAR SESSÃO SALVA
+window.onload = () => {
+    const sessao = localStorage.getItem("sala_futuro_sessao");
+    if (sessao) {
+        usuario = JSON.parse(sessao);
+        abrirPainel();
+        iniciarSincronizacaoAutomatica();
+    }
+};
 </script>
 
 </body>
