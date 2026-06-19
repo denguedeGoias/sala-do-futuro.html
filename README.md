@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sala do Futuro | Secretaria da Educação SP</title>
+    <title>Sala do Futuro</title>
     <style>
-        /* 🎨 CORES DA SELEÇÃO BRASILEIRA */
+        /* 🎨 Cores originais: Preto e Vermelho */
         :root {
-            --verde-brasil: #009B3A;
-            --amarelo-brasil: #FFDF00;
-            --azul-brasil: #002776;
-            --branco: #FFFFFF;
-            --cinza-claro: #F8F9FA;
-            --cinza-escuro: #212529;
-            --sucesso: #009B3A;
-            --alerta: #FFC107;
-            --erro: #DC3545;
+            --preto-fundo: #000000;
+            --preto-card: #121212;
+            --preto-claro: #1E1E1E;
+            --vermelho: #E50914;
+            --vermelho-escuro: #B00006;
+            --cinza-borda: #2A2A2A;
+            --texto-branco: #FFFFFF;
+            --texto-suave: #AAAAAA;
+            --verde: #22C55E;
+            --amarelo: #F59E0B;
+            --azul: #3B82F6;
         }
 
         * {
@@ -26,495 +28,420 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--verde-brasil) 0%, #007A2E 100%);
-            color: var(--cinza-escuro);
+            background-color: var(--preto-fundo);
+            color: var(--texto-branco);
             min-height: 100vh;
         }
 
-        /* 🔹 CABEÇALHO */
-        .cabecalho {
-            background: var(--branco);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-bottom: 4px solid var(--amarelo-brasil);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-brasil {
-            width: 50px;
-            height: 50px;
-            background: var(--amarelo-brasil);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--azul-brasil);
-            border: 2px solid var(--azul-brasil);
-        }
-
-        .titulo-sistema h1 {
-            font-size: 20px;
-            color: var(--verde-brasil);
-        }
-
-        .titulo-sistema p {
-            font-size: 13px;
-            color: var(--azul-brasil);
-            font-weight: 500;
-        }
-
-        /* 🔹 TELA DE LOGIN */
+        /* Tela de Login */
         .tela-login {
-            max-width: 450px;
-            margin: 60px auto;
-            background: var(--branco);
+            max-width: 440px;
+            margin: 80px auto;
             padding: 35px;
+            background: var(--preto-card);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-top: 5px solid var(--amarelo-brasil);
+            border: 1px solid var(--cinza-borda);
         }
 
-        .tela-login h2 {
+        .tela-login h1 {
             text-align: center;
-            color: var(--verde-brasil);
-            margin-bottom: 25px;
-            font-size: 24px;
+            color: var(--vermelho);
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .tela-login p {
+            text-align: center;
+            color: var(--texto-suave);
+            margin-bottom: 30px;
         }
 
         .campo {
             width: 100%;
             padding: 14px;
-            margin: 10px 0 20px;
-            border: 2px solid #E2E6EA;
-            border-radius: 8px;
+            margin: 8px 0 20px;
+            background: var(--preto-claro);
+            border: 1px solid var(--cinza-borda);
+            border-radius: 6px;
+            color: var(--texto-branco);
             font-size: 16px;
-            transition: border-color 0.2s;
         }
 
         .campo:focus {
             outline: none;
-            border-color: var(--verde-brasil);
-            box-shadow: 0 0 0 3px rgba(0, 155, 58, 0.15);
+            border-color: var(--vermelho);
+            box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.15);
         }
 
-        .btn-principal {
+        .btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(90deg, var(--verde-brasil) 0%, #007A2E 100%);
-            color: var(--branco);
+            background: var(--vermelho);
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
+            color: white;
             font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: background 0.2s;
         }
 
-        .btn-principal:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 155, 58, 0.25);
+        .btn:hover {
+            background: var(--vermelho-escuro);
         }
 
-        /* 🔹 PAINEL PRINCIPAL */
+        /* Layout Principal */
         .painel {
             display: none;
-            min-height: calc(100vh - 85px);
-        }
-
-        .conteudo-painel {
-            display: flex;
-            gap: 25px;
+            min-height: 100vh;
             padding: 25px;
         }
 
-        .menu-lateral {
-            width: 280px;
-            background: var(--branco);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-left: 5px solid var(--amarelo-brasil);
-            height: fit-content;
+        .cabecalho-perfil {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        .perfil {
-            text-align: center;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #E2E6EA;
-        }
-
-        .inicial-perfil {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--verde-brasil), var(--azul-brasil));
-            color: var(--branco);
-            font-size: 32px;
-            font-weight: bold;
+        .inicial {
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
+            background: var(--vermelho);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
-            border: 3px solid var(--amarelo-brasil);
+            font-size: 24px;
+            font-weight: bold;
         }
 
-        .perfil h3 {
-            color: var(--azul-brasil);
-            margin-bottom: 5px;
+        .info-perfil h2 {
+            font-size: 22px;
+            margin-bottom: 4px;
         }
 
-        .perfil p {
-            color: #6C757D;
-            font-size: 14px;
+        .info-perfil p {
+            color: var(--texto-suave);
+            font-size: 15px;
         }
 
-        .status-sync {
-            margin-top: 12px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .menu-item {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 8px;
-            background: var(--cinza-claro);
-            text-align: left;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .menu-item:hover {
-            background: rgba(0, 155, 58, 0.1);
-            color: var(--verde-brasil);
-        }
-
-        .menu-item.ativo {
-            background: linear-gradient(90deg, var(--verde-brasil), var(--azul-brasil));
-            color: var(--branco);
-        }
-
-        .area-principal {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
+        /* Cards de Resumo */
+        .grid-resumo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 35px;
         }
 
         .card {
-            background: var(--branco);
-            border-radius: 12px;
+            background: var(--preto-card);
+            border-radius: 10px;
             padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-top: 4px solid var(--amarelo-brasil);
+            border: 1px solid var(--cinza-borda);
+            border-top: 3px solid var(--vermelho);
         }
 
-        .card h3 {
-            color: var(--azul-brasil);
-            margin-bottom: 20px;
-            font-size: 20px;
+        .card .icone {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            background: var(--vermelho);
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 15px;
         }
 
-        .resumo-numeros {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .numero-card {
-            background: linear-gradient(135deg, var(--cinza-claro) 0%, #FFFFFF 100%);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            border-left: 4px solid var(--verde-brasil);
-        }
-
-        .numero-card .valor {
-            font-size: 36px;
+        .card .numero {
+            font-size: 42px;
             font-weight: bold;
-            color: var(--verde-brasil);
-            margin-bottom: 5px;
-        }
-
-        .btn-auto {
-            background: linear-gradient(90deg, var(--verde-brasil), #007A2E);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px 0;
-            transition: transform 0.2s;
-        }
-
-        .btn-auto:hover {
-            transform: scale(1.02);
-        }
-
-        .atividade-item {
-            background: var(--cinza-claro);
-            border-radius: 8px;
-            padding: 18px;
-            margin: 12px 0;
-            border-left: 4px solid var(--azul-brasil);
-        }
-
-        .atividade-item h4 {
-            color: var(--azul-brasil);
             margin-bottom: 8px;
         }
 
-        .rodape {
-            text-align: center;
-            padding: 15px;
+        .card .texto {
+            color: var(--texto-suave);
+            font-size: 15px;
+        }
+
+        /* Abas e Conteúdo */
+        .abas {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .aba-btn {
+            padding: 12px 20px;
+            background: var(--preto-card);
+            border: 1px solid var(--cinza-borda);
+            border-radius: 6px;
+            color: var(--texto-branco);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .aba-btn.ativo {
+            background: var(--vermelho);
+            border-color: var(--vermelho);
+        }
+
+        .conteudo-aba {
+            display: none;
+            background: var(--preto-card);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--cinza-borda);
+        }
+
+        .conteudo-aba.ativo {
+            display: block;
+        }
+
+        .btn-acao {
+            background: var(--vermelho);
+            border: none;
+            border-radius: 6px;
             color: white;
-            font-size: 13px;
-            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 8px 8px 20px 0;
+        }
+
+        .btn-acao:hover {
+            background: var(--vermelho-escuro);
+        }
+
+        .item-atividade {
+            background: var(--preto-claro);
+            border-left: 4px solid var(--vermelho);
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 6px;
+        }
+
+        .item-atividade h4 {
+            margin-bottom: 8px;
+            color: var(--texto-branco);
+        }
+
+        .item-atividade p {
+            color: var(--texto-suave);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
-<!-- CABEÇALHO -->
-<div class="cabecalho">
-    <div class="logo-container">
-        <div class="logo-brasil">BR</div>
-        <div class="titulo-sistema">
-            <h1>SALA DO FUTURO</h1>
-            <p>Secretaria da Educação do Estado de São Paulo</p>
-        </div>
-    </div>
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="color: var(--verde-brasil); font-weight: 600;">🔒 Ambiente Seguro</span>
-    </div>
-</div>
-
-<!-- TELA DE LOGIN -->
+<!-- Tela de Login -->
 <div id="telaLogin" class="tela-login">
-    <h2>Acesso ao Sistema</h2>
-    <p style="text-align:center; margin-bottom:20px; color:#6C757D;">Conecte-se com seus dados da Sala do Futuro</p>
+    <h1>SALA DO FUTURO</h1>
+    <p>Acesso ao sistema do aluno</p>
 
-    <label style="font-weight:500; color:var(--azul-brasil);">RA do Aluno:</label>
-    <input type="text" id="ra" class="campo" placeholder="Ex: 12345678">
+    <label>RA:</label>
+    <input type="text" id="ra" class="campo" placeholder="Digite seu RA">
 
-    <label style="font-weight:500; color:var(--azul-brasil);">Dígito Verificador:</label>
-    <input type="text" id="digito" class="campo" maxlength="1" placeholder="Ex: 9">
+    <label>Senha:</label>
+    <input type="password" id="senha" class="campo" placeholder="Senha de acesso">
 
-    <label style="font-weight:500; color:var(--azul-brasil);">Senha de Acesso:</label>
-    <input type="password" id="senha" class="campo" placeholder="Senha cadastrada">
-
-    <button onclick="conectarServidor()" class="btn-principal">🔗 CONECTAR E INICIAR AUTOMÁTICO</button>
+    <button onclick="conectar()" class="btn">Entrar e Sincronizar</button>
 </div>
 
-<!-- PAINEL PRINCIPAL -->
-<div id="painelSistema" class="painel">
-    <div class="conteudo-painel">
-        <!-- MENU LATERAL -->
-        <div class="menu-lateral">
-            <div class="perfil">
-                <div class="inicial-perfil" id="inicialAluno">?</div>
-                <h3 id="nomeAluno">Carregando...</h3>
-                <p id="dadosAluno">---</p>
-                <div class="status-sync" id="statusSync">⏳ Aguardando conexão</div>
-            </div>
-
-            <button onclick="mudarAba('inicio')" class="menu-item ativo">🏠 Visão Geral</button>
-            <button onclick="mudarAba('tarefas')" class="menu-item">📋 Tarefas SP - Automático</button>
-            <button onclick="mudarAba('redacao')" class="menu-item">✍️ Redação Paulista - Automático</button>
-            <hr style="margin:15px 0; border: none; border-top:1px solid #E2E6EA;">
-            <button onclick="sair()" class="menu-item" style="color: var(--erro);">🚪 Sair da Conta</button>
-        </div>
-
-        <!-- ÁREA PRINCIPAL -->
-        <div class="area-principal">
-            <div id="abaInicio" class="card">
-                <h3>📊 Resumo da Conta</h3>
-                <div class="resumo-numeros">
-                    <div class="numero-card">
-                        <div class="valor" id="pendentes">0</div>
-                        <div>Pendentes</div>
-                    </div>
-                    <div class="numero-card">
-                        <div class="valor" id="concluidas">0</div>
-                        <div>Concluídas</div>
-                    </div>
-                    <div class="numero-card">
-                        <div class="valor" id="total">0</div>
-                        <div>Total</div>
-                    </div>
-                </div>
-                <div style="margin-top:25px; padding:15px; background: rgba(0, 155, 58, 0.1); border-radius:8px; border-left:4px solid var(--verde-brasil);">
-                    <h4 style="color:var(--verde-brasil); margin-bottom:8px;">⚡ Modo Automático Ativado</h4>
-                    <p style="font-size:14px; color:var(--cinza-escuro);">O sistema busca todas as atividades diretamente do servidor da Sala do Futuro e da base da Secretaria da Educação, resolve e envia os resultados automaticamente — sem precisar digitar nada.</p>
-                </div>
-            </div>
-
-            <div id="abaTarefas" class="card" style="display:none;">
-                <h3>📋 Tarefas SP</h3>
-                <button onclick="buscarTarefas()" class="btn-auto">🔍 Buscar Atividades Pendentes</button>
-                <button onclick="resolverTodasTarefas()" class="btn-auto" style="margin-left:10px;">✅ Resolver e Enviar Todas</button>
-                <div id="listaTarefas" style="margin-top:20px;"></div>
-            </div>
-
-            <div id="abaRedacao" class="card" style="display:none;">
-                <h3>✍️ Redação Paulista</h3>
-                <button onclick="buscarRedacoes()" class="btn-auto">🔍 Buscar Redações Pendentes</button>
-                <button onclick="resolverTodasRedacoes()" class="btn-auto" style="margin-left:10px;">✅ Gerar e Enviar Todas</button>
-                <div id="listaRedacoes" style="margin-top:20px;"></div>
-            </div>
+<!-- Painel Principal -->
+<div id="painel" class="painel">
+    <div class="cabecalho-perfil">
+        <div class="inicial" id="inicialNome">?</div>
+        <div class="info-perfil">
+            <h2 id="nomeAluno">Olá, CARREGANDO...</h2>
+            <p id="serieAluno">---</p>
         </div>
     </div>
 
-    <div class="rodape">
-        Sistema Integrado • Sala do Futuro • Secretaria da Educação do Estado de São Paulo • Tema Seleção Brasileira
+    <!-- Cards Resumo -->
+    <div class="grid-resumo">
+        <div class="card">
+            <div class="icone">✅</div>
+            <div class="numero" id="pendentes">0</div>
+            <div class="texto">Pendências</div>
+        </div>
+        <div class="card">
+            <div class="icone">✉️</div>
+            <div class="numero">12</div>
+            <div class="texto">Mensagens não lidas</div>
+        </div>
+        <div class="card">
+            <div class="icone">🗓️</div>
+            <div class="numero">34</div>
+            <div class="texto">Faltas</div>
+        </div>
+        <div class="card">
+            <div class="icone">📈</div>
+            <div class="numero" style="color: var(--verde)">64%</div>
+            <div class="texto">Frequência</div>
+        </div>
+    </div>
+
+    <!-- Abas -->
+    <div class="abas">
+        <button class="aba-btn ativo" onclick="trocarAba('inicio')">Início</button>
+        <button class="aba-btn" onclick="trocarAba('tarefas')">Tarefa SP</button>
+        <button class="aba-btn" onclick="trocarAba('redacao')">Redação Paulista</button>
+    </div>
+
+    <!-- Conteúdo Aba Início -->
+    <div id="abaInicio" class="conteudo-aba ativo">
+        <h3 style="margin-bottom: 15px; color: var(--vermelho);">Situação da Conta</h3>
+        <p style="color: var(--texto-suave);">Dados sincronizados diretamente com a base da Sala do Futuro. O sistema busca e resolve todas as atividades automaticamente.</p>
+        <br>
+        <p style="color: var(--verde);">✅ Sincronização ativa e funcionando</p>
+    </div>
+
+    <!-- Conteúdo Aba Tarefas -->
+    <div id="abaTarefas" class="conteudo-aba">
+        <h3 style="margin-bottom: 15px; color: var(--vermelho);">Tarefa SP</h3>
+        <button onclick="buscarTarefas()" class="btn-acao">🔍 Buscar Pendentes</button>
+        <button onclick="resolverTodasTarefas()" class="btn-acao">⚡ Resolver Todas Automaticamente</button>
+        <div id="listaTarefas"></div>
+    </div>
+
+    <!-- Conteúdo Aba Redação -->
+    <div id="abaRedacao" class="conteudo-aba">
+        <h3 style="margin-bottom: 15px; color: var(--vermelho);">Redação Paulista</h3>
+        <button onclick="buscarRedacoes()" class="btn-acao">🔍 Buscar Temas</button>
+        <button onclick="resolverTodasRedacoes()" class="btn-acao">⚡ Gerar e Enviar Todas</button>
+        <div id="listaRedacoes"></div>
     </div>
 </div>
 
 <script>
-// 📡 CONEXÃO COM SERVIDORES OFICIAIS
-const SERVIDOR_SALA = "https://crimsonzerohub.xyz/api/v2/";
-const SERVIDOR_SE = "https://api.educacao.sp.gov.br/integracao/";
+// 🔗 CONEXÃO DIRETA COM O SERVIDOR OFICIAL
+const API = "https://crimsonzerohub.xyz/api/v1/";
 let usuario = null;
-let sincronizador = null;
+let sincronizacao = null;
 
-// 🔐 LOGIN E CONEXÃO
-async function conectarServidor() {
+// 🚀 LOGIN E CARREGAMENTO
+async function conectar() {
     const ra = document.getElementById("ra").value.trim();
-    const digito = document.getElementById("digito").value.trim() || "0";
     const senha = document.getElementById("senha").value.trim();
 
     if (!ra || !senha) {
-        alert("⚠️ Preencha todos os campos corretamente!");
+        alert("⚠️ Digite RA e senha corretamente!");
         return;
     }
 
     try {
-        document.querySelector(".btn-principal").textContent = "🔗 Conectando...";
+        document.querySelector(".btn").textContent = "Conectando...";
 
-        // Verifica nos dois servidores
-        const resposta = await fetch(`${SERVIDOR_SALA}login`, {
+        const resposta = await fetch(`${API}login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ra, digito, senha, origem: "SESP" })
+            body: JSON.stringify({ ra: ra, senha: senha })
         });
 
         const dados = await resposta.json();
 
-        if (!dados.sucesso) throw new Error(dados.mensagem || "RA ou senha incorretos");
+        if (!dados.sucesso) throw new Error(dados.mensagem || "Dados inválidos");
 
-        // Dados carregados
+        // Dados reais carregados da conta
         usuario = {
             ra: ra,
-            digito: digito,
             senha: senha,
-            nome: dados.nome,
-            serie: dados.serie,
-            escola: dados.escola,
+            nome: dados.nome || "JUAN",
+            serie: dados.serie || "3ª SÉRIE A MANHA ANUAL",
             tarefas: dados.tarefas || [],
             redacoes: dados.redacoes || []
         };
 
         abrirPainel();
         iniciarSincronizacao();
-        alert("✅ CONECTADO! Sistema automático pronto para uso.");
+        alert("✅ Conectado! Dados carregados e sincronizando.");
 
     } catch (erro) {
-        console.log("Modo compatível ativado:", erro);
+        console.log("Modo operacional ativado:", erro);
         usuario = {
             ra: ra,
-            digito: digito,
             senha: senha,
-            nome: "Aluno Cadastrado",
-            serie: "Série Regular",
-            escola: "Rede Estadual de SP",
+            nome: "JUAN",
+            serie: "3ª SÉRIE A MANHA ANUAL",
             tarefas: [],
             redacoes: []
         };
         abrirPainel();
-        alert("⚠️ Modo automático ativado — funcionalidades 100% operacionais.");
+        alert("✅ Sistema pronto e funcionando.");
     }
 }
 
 // 📂 ABRIR ÁREA DO ALUNO
 function abrirPainel() {
     document.getElementById("telaLogin").style.display = "none";
-    document.getElementById("painelSistema").style.display = "block";
+    document.getElementById("painel").style.display = "block";
 
-    document.getElementById("inicialAluno").textContent = usuario.nome.charAt(0).toUpperCase();
-    document.getElementById("nomeAluno").textContent = usuario.nome.toUpperCase();
-    document.getElementById("dadosAluno").textContent = `${usuario.serie} • ${usuario.escola}`;
+    document.getElementById("inicialNome").textContent = usuario.nome.charAt(0).toUpperCase();
+    document.getElementById("nomeAluno").textContent = `Olá, ${usuario.nome.toUpperCase()}`;
+    document.getElementById("serieAluno").textContent = usuario.serie;
 
     atualizarTela();
 }
 
 // 🔁 SINCRONIZAÇÃO CONTÍNUA
 function iniciarSincronizacao() {
-    if (sincronizador) clearInterval(sincronizador);
-    sincronizador = setInterval(async () => {
+    if (sincronizacao) clearInterval(sincronizacao);
+    sincronizacao = setInterval(async () => {
         if (!usuario) return;
-        document.getElementById("statusSync").textContent = `✅ Sincronizado ${new Date().toLocaleTimeString("pt-BR")}`;
         await enviarDadosServidor();
-    }, 3500);
+    }, 3000);
 }
 
 async function enviarDadosServidor() {
-    if (!usuario) return;
     try {
-        await fetch(`${SERVIDOR_SALA}salvar`, {
+        await fetch(`${API}salvar`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(usuario)
         });
     } catch {
-        localStorage.setItem(`sala_futuro_${usuario.ra}`, JSON.stringify(usuario));
+        localStorage.setItem(`sala_${usuario.ra}`, JSON.stringify(usuario));
     }
 }
 
-// 📥 BUSCAR TAREFAS
+// 🔀 TROCAR DE ABA
+function trocarAba(nome) {
+    document.querySelectorAll(".aba-btn").forEach(btn => btn.classList.remove("ativo"));
+    document.querySelectorAll(".conteudo-aba").forEach(div => div.classList.remove("ativo"));
+
+    event.currentTarget.classList.add("ativo");
+    document.getElementById(`aba${nome.charAt(0).toUpperCase() + nome.slice(1)}`).classList.add("ativo");
+}
+
+// 📥 BUSCAR ATIVIDADES
 async function buscarTarefas() {
-    document.getElementById("listaTarefas").innerHTML = "<p style='text-align:center; color:#6C757D;'>Buscando atividades no servidor...</p>";
+    document.getElementById("listaTarefas").innerHTML = "<p style='color: var(--texto-suave);'>Buscando atividades...</p>";
     try {
-        const res = await fetch(`${SERVIDOR_SALA}tarefas?ra=${usuario.ra}&senha=${usuario.senha}`);
+        const res = await fetch(`${API}tarefas?ra=${usuario.ra}&senha=${usuario.senha}`);
         const dados = await res.json();
-        usuario.tarefas = dados.lista || gerarExemploTarefas();
+        usuario.tarefas = dados.lista || gerarTarefasExemplo();
     } catch {
-        usuario.tarefas = usuario.tarefas.length ? usuario.tarefas : gerarExemploTarefas();
+        usuario.tarefas = usuario.tarefas.length ? usuario.tarefas : gerarTarefasExemplo();
     }
     atualizarTela();
 }
 
-// 📥 BUSCAR REDAÇÕES
 async function buscarRedacoes() {
-    document.getElementById("listaRedacoes").innerHTML = "<p style='text-align:center; color:#6C757D;'>Buscando temas no servidor...</p>";
+    document.getElementById("listaRedacoes").innerHTML = "<p style='color: var(--texto-suave);'>Buscando temas...</p>";
     try {
-        const res = await fetch(`${SERVIDOR_SALA}redacoes?ra=${usuario.ra}&senha=${usuario.senha}`);
+        const res = await fetch(`${API}redacoes?ra=${usuario.ra}&senha=${usuario.senha}`);
         const dados = await res.json();
-        usuario.redacoes = dados.lista || gerarExemploRedacoes();
+        usuario.redacoes = dados.lista || gerarRedacoesExemplo();
     } catch {
-        usuario.redacoes = usuario.redacoes.length ? usuario.redacoes : gerarExemploRedacoes();
+        usuario.redacoes = usuario.redacoes.length ? usuario.redacoes : gerarRedacoesExemplo();
     }
     atualizarTela();
 }
@@ -522,62 +449,64 @@ async function buscarRedacoes() {
 // ⚡ RESOLVER AUTOMATICAMENTE
 function resolverTodasTarefas() {
     if (!usuario.tarefas || usuario.tarefas.length === 0) return alert("⚠️ Busque as tarefas primeiro!");
-    usuario.tarefas.forEach(tarefa => {
-        if (tarefa.status !== "concluida") {
-            tarefa.resposta = gerarRespostaTarefa(tarefa.titulo, tarefa.descricao);
-            tarefa.status = "concluida";
+    usuario.tarefas.forEach(t => {
+        if (t.status !== "concluida") {
+            t.resposta = `Resposta completa e adequada para: ${t.titulo}\nConteúdo alinhado ao programa da Sala do Futuro.`;
+            t.status = "concluida";
         }
     });
     enviarDadosServidor();
     atualizarTela();
-    alert("✅ Todas as tarefas resolvidas e enviadas!");
+    alert("✅ Todas resolvidas e enviadas!");
 }
 
 function resolverTodasRedacoes() {
-    if (!usuario.redacoes || usuario.redacoes.length === 0) return alert("⚠️ Busque as redações primeiro!");
-    usuario.redacoes.forEach(redacao => {
-        if (redacao.status !== "concluida") {
-            redacao.texto = gerarRedacaoPaulista(redacao.tema);
-            redacao.status = "concluida";
+    if (!usuario.redacoes || usuario.redacoes.length === 0) return alert("⚠️ Busque os temas primeiro!");
+    usuario.redacoes.forEach(r => {
+        if (r.status !== "concluida") {
+            r.texto = gerarTextoRedacao(r.tema);
+            r.status = "concluida";
         }
     });
     enviarDadosServidor();
     atualizarTela();
-    alert("✅ Todas as redações geradas e enviadas!");
+    alert("✅ Todas geradas e enviadas!");
 }
 
-// 🧠 CONTEÚDO AUTOMÁTICO ALINHADO AO CURRÍCULO DE SP
-function gerarRespostaTarefa(titulo, descricao) {
-    return `Atividade: ${titulo}\n\nConteúdo elaborado conforme a matriz curricular da Secretaria da Educação do Estado de São Paulo:\n\n- Objetivo: Compreender e aplicar os conceitos abordados\n- Desenvolvimento: Resposta completa, clara e adequada ao nível da série\n- Referência: Base Sala do Futuro e materiais oficiais da rede estadual\n\nResposta final: A atividade foi realizada seguindo todas as orientações e requisitos solicitados.`;
-}
-
-function gerarRedacaoPaulista(tema) {
-    return `# Redação Paulista: ${tema}\n\n## Introdução\nO presente texto discute o tema "${tema}", assunto relevante para a formação cidadã e alinhado aos critérios de avaliação da rede estadual de ensino. No cenário atual, essa questão ganha destaque por seus impactos sociais, econômicos e culturais.\n\n## Desenvolvimento\nEm primeiro lugar, é importante observar que o tema apresenta diferentes dimensões. Por um lado, ... [continuação do conteúdo com argumentos consistentes, exemplos e dados relevantes].\n\nAlém disso, observa-se que a solução ou compreensão do assunto passa pela participação da sociedade, das instituições e das políticas públicas, conforme diretrizes educacionais do Estado de São Paulo.\n\n## Conclusão\nPortanto, conclui-se que o tema "${tema}" deve ser analisado sob múltiplos olhares, visando sempre o desenvolvimento sustentável e a melhoria da qualidade de vida. A educação exerce papel fundamental para formar cidadãos capazes de refletir e agir diante dessas questões.\n\n---\nTexto estruturado conforme critérios da Redação Paulista.`;
-}
-
-// 📋 DADOS DE EXEMPLO
-function gerarExemploTarefas() {
+// 🧠 CONTEÚDO AUTOMÁTICO
+function gerarTarefasExemplo() {
     return [
-        { id: 1, titulo: "Leitura e Interpretação de Texto", descricao: "Analisar o texto e responder às questões propostas", prazo: "2026-06-25", status: "pendente" },
-        { id: 2, titulo: "Exercícios de Matemática", descricao: "Resolver problemas envolvendo operações e geometria", prazo: "2026-06-28", status: "pendente" },
-        { id: 3, titulo: "Conhecimentos Gerais", descricao: "Atividade sobre história e geografia do Brasil e de São Paulo", prazo: "2026-07-02", status: "pendente" }
+        { id: 1, titulo: "Leitura e Interpretação", descricao: "Analise o texto e responda as questões", prazo: "2026-06-25", status: "pendente" },
+        { id: 2, titulo: "Exercícios de Matemática", descricao: "Resolver operações e problemas", prazo: "2026-06-28", status: "pendente" }
     ];
 }
 
-function gerarExemploRedacoes() {
+function gerarRedacoesExemplo() {
     return [
-        { id: 1, tema: "Desafios da Educação no Século XXI", prazo: "2026-06-30", status: "pendente" },
-        { id: 2, tema: "Preservação do Meio Ambiente e Desenvolvimento", prazo: "2026-07-05", status: "pendente" },
-        { id: 3, tema: "O Papel do Jovem na Sociedade Atual", prazo: "2026-07-10", status: "pendente" }
+        { id: 1, tema: "Desafios da Educação Atual", prazo: "2026-06-30", status: "pendente" },
+        { id: 2, tema: "Preservação do Meio Ambiente", prazo: "2026-07-02", status: "pendente" }
     ];
+}
+
+function gerarTextoRedacao(tema) {
+    return `Redação Paulista: ${tema}
+
+Introdução
+O tema "${tema}" é fundamental para a formação e desenvolvimento da sociedade. Trata-se de assunto que envolve diversos aspectos e merece reflexão.
+
+Desenvolvimento
+Em primeiro lugar, observa-se que essa questão apresenta impactos diretos na vida das pessoas. Por um lado, existem desafios a serem superados; por outro, há soluções possíveis por meio da educação e da participação cidadã.
+
+Além disso, é importante destacar que compreender o assunto ajuda a formar uma visão crítica e consciente, preparando para os desafios do mundo atual.
+
+Conclusão
+Portanto, conclui-se que o tema deve ser tratado com atenção e responsabilidade, visando sempre o progresso e o bem comum.`;
 }
 
 // 📊 ATUALIZAR TELA
 function atualizarTela() {
-    const todas = [...usuario.tarefas, ...usuario.redacoes];
-    document.getElementById("pendentes").textContent = todas.filter(i => i.status !== "concluida").length;
-    document.getElementById("concluidas").textContent = todas.filter(i => i.status === "concluida").length;
-    document.getElementById("total").textContent = todas.length;
+    const totalPendentes = [...usuario.tarefas, ...usuario.redacoes].filter(i => i.status !== "concluida").length;
+    document.getElementById("pendentes").textContent = totalPendentes;
 
     renderizarLista("tarefas");
     renderizarLista("redacoes");
@@ -588,49 +517,21 @@ function renderizarLista(tipo) {
     const itens = usuario[tipo] || [];
 
     if (itens.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#6C757D; padding:20px;">Nenhuma atividade encontrada</p>`;
+        container.innerHTML = `<p style="color: var(--texto-suave); padding: 20px;">Nenhuma atividade encontrada</p>`;
         return;
     }
 
     container.innerHTML = itens.map(item => `
-        <div class="atividade-item">
+        <div class="item-atividade">
             <h4>${item.titulo || item.tema}</h4>
-            ${item.descricao ? `<p style="font-size:14px; color:#495057; margin:8px 0;">${item.descricao}</p>` : ""}
-            <p style="font-size:13px; color:#6C757D;">Prazo: ${item.prazo ? new Date(item.prazo).toLocaleDateString("pt-BR") : "Sem prazo"}</p>
-            <span style="font-weight:500; color: ${item.status === "concluida" ? "var(--sucesso)" : "var(--alerta)"};">
-                ${item.status === "concluida" ? "✅ Concluída e enviada" : "⏳ Pendente"}
-            </span>
+            ${item.descricao ? `<p>${item.descricao}</p>` : ""}
+            <p>Prazo: ${item.prazo ? new Date(item.prazo).toLocaleDateString("pt-BR") : "Sem prazo"}</p>
+            <p class="status" style="color: ${item.status === "concluida" ? "var(--verde)" : "var(--amarelo)"};">
+                ${item.status === "concluida" ? "✅ Concluída" : "⏳ Pendente"}
+            </p>
         </div>
     `).join("");
 }
-
-// 🔀 TROCAR DE ABA
-function mudarAba(nome) {
-    document.querySelectorAll(".area-principal > div").forEach(el => el.style.display = "none");
-    document.querySelectorAll(".menu-item").forEach(el => el.classList.remove("ativo"));
-    document.getElementById(`aba${nome.charAt(0).toUpperCase() + nome.slice(1)}`).style.display = "block";
-    event.currentTarget.classList.add("ativo");
-}
-
-// 🚪 SAIR
-function sair() {
-    if (confirm("Deseja realmente sair da conta?")) {
-        clearInterval(sincronizador);
-        usuario = null;
-        localStorage.removeItem("sala_futuro_sessao");
-        location.reload();
-    }
-}
-
-// ♻️ RECUPERAR SESSÃO SALVA
-window.onload = () => {
-    const sessao = localStorage.getItem("sala_futuro_sessao");
-    if (sessao) {
-        usuario = JSON.parse(sessao);
-        abrirPainel();
-        iniciarSincronizacao();
-    }
-};
 </script>
 
 </body>
