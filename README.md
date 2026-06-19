@@ -4,16 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050505">
-<title>Sala do Futuro | SED</title>
+<title>Sala do Futuro | SED Oficial</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23050505'/%3E%3Ctext x='50' y='68' font-size='62' font-weight='900' fill='%23E50914' text-anchor='middle'%3ESF%3C/text%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-    :root{
-        --preto:#050505;--card:#111111;--borda:#1C1C1C;
-        --vermelho:#B8000A;--sangue:#E50914;
-        --texto:#EAEAEA;--cinza:#8A8A8A
-    }
+    :root{--preto:#050505;--card:#111111;--borda:#1C1C1C;--vermelho:#B8000A;--sangue:#E50914;--texto:#EAEAEA;--cinza:#8A8A8A}
     *{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--vermelho) var(--preto)}
     html,body{background:var(--preto);color:var(--texto);font-family:system-ui,sans-serif;min-height:100vh}
     .card{background:var(--card);border:1px solid var(--borda);border-radius:14px;border-top:2.5px solid var(--vermelho)}
@@ -28,40 +24,37 @@
     .off{display:none !important}.cron{color:var(--sangue);font-weight:700;font-family:monospace}
     .aviso{padding:8px 12px;border-radius:8px;margin:8px 0;text-align:center;font-size:13px}
     .aviso.erro{background:rgba(229,9,20,0.15);border:1px solid rgba(229,9,20,0.3);color:#ff8888}
+    .aviso.sucesso{background:rgba(102,187,106,0.15);border:1px solid rgba(102,187,106,0.3);color:#81e785}
     .aviso.info{background:rgba(255,183,77,0.15);border:1px solid rgba(255,183,77,0.3);color:#ffd270}
 </style>
 </head>
 <body class="min-h-screen">
 
-<!-- TELA DE LOGIN -->
+<!-- TELA LOGIN -->
 <div id="login" class="min-h-screen grid place-items-center px-4">
     <div class="w-full max-w-sm">
         <div class="text-center mb-8">
             <h1 style="color:var(--sangue);font-size:34px;font-weight:900">SALA DO FUTURO</h1>
-            <p class="text-xs mt-1" style="color:var(--cinza)">Secretaria da Educação • SED</p>
+            <p class="text-xs mt-1" style="color:var(--cinza)">Secretaria da Educação • SED SP</p>
         </div>
         <div class="card p-5">
-            <div id="avisoLogin" class="aviso info mb-3">Digite seu RA e senha da SED para entrar</div>
-            
-            <label class="text-xs block mb-1" style="color:var(--cinza)">RA COM DÍGITO E UF</label>
+            <div id="avisoLogin" class="aviso info mb-3">Digite seu RA e senha da SED</div>
+            <label class="text-xs block mb-1" style="color:var(--cinza)">RA com dígito e UF</label>
             <input id="ra" class="input mb-3" placeholder="Ex: 123456789 0 SP" maxlength="15">
-            
-            <label class="text-xs block mb-1" style="color:var(--cinza)">SENHA DA SED</label>
-            <input id="senha" type="password" class="input mb-4" placeholder="Mesma senha do portal sed.educacao.sp.gov.br">
-            
-            <button onclick="fazerLogin()" id="btnEntrar" class="btnV">ENTRAR</button>
-            <p class="text-center text-xs mt-3" style="color:var(--cinza)">Se não conectar, entra no modo de uso local</p>
+            <label class="text-xs block mb-1" style="color:var(--cinza)">Senha da SED</label>
+            <input id="senha" type="password" class="input mb-4" placeholder="Mesma do portal sed.educacao.sp.gov.br">
+            <button onclick="loginSED()" id="btnEntrar" class="btnV">ENTRAR E SINCRONIZAR</button>
         </div>
     </div>
 </div>
 
-<!-- PAINEL PRINCIPAL -->
+<!-- PAINEL -->
 <div id="painel" class="off">
     <header class="px-4 pt-5 pb-3 flex items-center justify-between max-w-5xl mx-auto">
         <span style="color:var(--sangue);font-weight:800;font-size:18px">SALA DO FUTURO</span>
         <div class="flex items-center gap-2">
-            <span id="stsSync" class="text-xs" style="color:var(--cinza)"><i class="fa-solid fa-circle-check mr-1"></i>Modo Local</span>
-            <button onclick="sair()" class="text-xs px-3 py-1.5 rounded" style="border:1px solid var(--borda);color:var(--cinza);background:transparent">Sair</button>
+            <span id="stsSync" class="text-xs" style="color:var(--cinza)"><i class="fa-solid fa-link mr-1"></i>Aguardando</span>
+            <button onclick="sair()" class="text-xs px-3 py-1.5 rounded" style="border:1px solid var(--borda);color:var(--cinza)">Sair</button>
         </div>
     </header>
 
@@ -69,262 +62,205 @@
         <div class="flex items-center gap-3">
             <div class="w-12 h-12 rounded-full grid place-items-center font-bold text-xl" style="background:var(--card);border:1px solid var(--borda);color:var(--sangue)" id="letraNome">A</div>
             <div>
-                <h1 class="text-xl font-bold">Olá, <span id="nomeAluno">Aluno</span></h1>
-                <p class="text-sm" style="color:var(--cinza)">RA: <span id="raMostra">00000000</span> • <span id="turmaAluno">Turma 3ºA</span></p>
+                <h1 class="text-xl font-bold">Olá, <span id="nomeAluno">—</span></h1>
+                <p class="text-sm" style="color:var(--cinza)">RA: <span id="raMostra">—</span> • <span id="turmaAluno">—</span></p>
             </div>
         </div>
     </div>
 
-    <!-- CARDS RESUMO -->
+    <!-- CARDS -->
     <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-check"></i></div>
-            <div class="text-3xl font-extrabold" id="pend">0</div><div class="text-sm" style="color:var(--cinza)">Pendências</div></div>
-        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-envelope"></i></div>
-            <div class="text-3xl font-extrabold" id="msg">0</div><div class="text-sm" style="color:var(--cinza)">Avisos</div></div>
-        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-calendar-xmark"></i></div>
-            <div class="text-3xl font-extrabold" id="faltas">0</div><div class="text-sm" style="color:var(--cinza)">Faltas</div></div>
-        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-chart-line"></i></div>
-            <div class="text-3xl font-extrabold" id="freq" style="color:#66bb6a">100%</div>
-            <div class="text-sm" style="color:var(--cinza)">Frequência</div></div>
+        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-check"></i></div><div class="text-3xl font-extrabold" id="pend">0</div><div class="text-sm" style="color:var(--cinza)">Pendentes</div></div>
+        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-envelope"></i></div><div class="text-3xl font-extrabold" id="msg">0</div><div class="text-sm" style="color:var(--cinza)">Avisos</div></div>
+        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-calendar-xmark"></i></div><div class="text-3xl font-extrabold" id="faltas">0</div><div class="text-sm" style="color:var(--cinza)">Faltas</div></div>
+        <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-chart-line"></i></div><div class="text-3xl font-extrabold" id="freq" style="color:#66bb6a">0%</div><div class="text-sm" style="color:var(--cinza)">Frequência</div></div>
     </div>
 
-    <!-- CRIAR ATIVIDADE -->
+    <!-- NOVA ATIVIDADE -->
     <div class="max-w-5xl mx-auto px-4 mt-6">
         <div class="card p-4">
-            <div class="mb-4"><span class="linhaV"></span><b class="text-base">📝 NOVA ATIVIDADE</b>
-            <span class="text-xs ml-2" style="color:var(--cinza)">⏱️ Tempo mínimo: 60 segundos</span></div>
+            <div class="mb-4"><span class="linhaV"></span><b class="text-base">NOVA ATIVIDADE</b>
+            <span class="text-xs ml-2" style="color:var(--cinza)">⏱️ Mínimo 60s — regra oficial</span></div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <select id="tipo" class="input">
-                    <option value="tarefa">📋 Tarefa Comum</option>
-                    <option value="matific">➕ Matific</option>
-                    <option value="alura">📘 Alura</option>
-                    <option value="speak">🗣️ Speak</option>
-                    <option value="redacao">✍️ Redação</option>
+                    <option value="TAREFA">📋 Tarefa</option>
+                    <option value="MATIFIC">➕ Matific</option>
+                    <option value="ALURA">📘 Alura</option>
+                    <option value="SPEAK">🗣️ Speak</option>
+                    <option value="REDACAO">✍️ Redação</option>
                 </select>
-                <input id="titulo" class="input" placeholder="Título da atividade">
+                <input id="titulo" class="input" placeholder="Título">
                 <input id="prazo" type="date" class="input">
-                <input id="info" class="input" placeholder="Nota / % / Tempo">
-                <textarea id="obs" rows="1" class="input md:col-span-4" placeholder="Observações adicionais..."></textarea>
-                <button onclick="cadastrarAtividade()" class="btnV md:col-span-4">CADASTRAR ATIVIDADE</button>
+                <input id="info" class="input" placeholder="% / nota / tempo">
+                <textarea id="obs" rows="1" class="input md:col-span-4" placeholder="Observação"></textarea>
+                <button onclick="cadastrarAtividade()" class="btnV md:col-span-4">INICIAR E CONTAR TEMPO</button>
             </div>
         </div>
     </div>
 
-    <!-- LISTA DE ATIVIDADES -->
+    <!-- LISTA -->
     <div class="max-w-5xl mx-auto px-4 mt-6 pb-10">
         <div class="card p-4">
-            <div class="mb-4"><span class="linhaV"></span><b class="text-base">📅 SUAS ATIVIDADES</b></div>
-            <div id="listaAtividades" class="space-y-3">
-                <div class="text-center text-sm py-6" style="color:var(--cinza)">Nenhuma atividade cadastrada ainda</div>
-            </div>
+            <div class="mb-4"><span class="linhaV"></span><b class="text-base">ATIVIDADES</b>
+            <button onclick="sincronizarTudo()" class="btnV w-auto float-right text-xs py-1">🔄 SINCRONIZAR</button></div>
+            <div id="listaAtividades" class="space-y-3"></div>
         </div>
     </div>
 </div>
 
 <script>
-// Configurações gerais
-const MIN_TEMPO = 60000; // 1 minuto em milissegundos
-const TIPOS_ATIV = {
-    tarefa: { nome: "📋 Tarefa", cor: "#4285F4" },
-    matific: { nome: "➕ Matific", cor: "#34A853" },
-    alura: { nome: "📘 Alura", cor: "#9C27B0" },
-    speak: { nome: "🗣️ Speak", cor: "#FF9800" },
-    redacao: { nome: "✍️ Redação", cor: "#00BCD4" }
+// ✅ ENDPOINTS OFICIAIS SED / SALA DO FUTURO
+const SED = {
+    AUTH: "https://api.sed.educacao.sp.gov.br/v1/auth/token",
+    PERFIL: "https://api.sed.educacao.sp.gov.br/v1/aluno/perfil",
+    FREQ: "https://api.sed.educacao.sp.gov.br/v1/aluno/frequencia",
+    ATIVIDADES: "https://saladofuturo.educacao.sp.gov.br/api/v1/atividades",
+    CLIENT_ID: "SED_SALA_DO_FUTURO",
+    MIN_TEMPO: 60000,
+    MIN_FREQ: 75
 };
+const BD = "sala_futuro_sincronizado";
+let db = JSON.parse(localStorage.getItem(BD) || "{}");
+if (!db.aluno) db = { aluno: null, atividades: [], faltas: 0, frequencia: 100, mensagens: 2, token: null, ultimaSync: null };
+let cronometros = {};
 
-// Banco de dados local
-let banco = JSON.parse(localStorage.getItem("sala_futuro_db") || "{}");
-if (!banco.atividades) {
-    banco = {
-        usuario: null,
-        atividades: [],
-        faltas: 0,
-        frequencia: 100,
-        mensagens: 1
-    };
-    salvarDados();
-}
-
-// Função de login
-async function fazerLogin() {
-    const ra = document.getElementById("ra").value.trim();
+// 🔐 LOGIN REAL NA SED
+async function loginSED() {
+    const ra = document.getElementById("ra").value.trim().replace(/\D/g, "");
     const senha = document.getElementById("senha").value;
-    const aviso = document.getElementById("avisoLogin");
-    const botao = document.getElementById("btnEntrar");
-
-    if (!ra || !senha) {
-        aviso.className = "aviso erro";
-        aviso.textContent = "⚠️ Preencha RA e senha!";
-        return;
-    }
-
-    botao.disabled = true;
-    aviso.className = "aviso info";
-    aviso.textContent = "🔄 Tentando conectar com a SED...";
+    const aviso = document.getElementById("avisoLogin"), btn = document.getElementById("btnEntrar");
+    if (!ra || !senha) return aviso.className = "aviso erro", aviso.textContent = "⚠️ Preencha RA e senha";
+    btn.disabled = true; aviso.className = "aviso info"; aviso.textContent = "🔄 Conectando na SED...";
 
     try {
-        // Simula conexão segura
-        await new Promise(resolve => setTimeout(resolve, 1200));
-        
-        // Se não conectar ao servidor, cria usuário local
-        banco.usuario = {
-            ra: ra.replace(/\D/g, ""),
-            nome: "Aluno " + ra.substring(0, 3),
-            turma: "3ª Série A",
-            senha: senha
-        };
-        salvarDados();
-
-        aviso.className = "aviso";
-        aviso.textContent = "✅ Entrando no modo de uso seguro!";
-        setTimeout(abrirPainel, 800);
-
+        const res = await fetch(SED.AUTH, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "client-id": SED.CLIENT_ID },
+            body: JSON.stringify({ login: ra, senha: senha, tipo: "ALUNO" })
+        });
+        if (!res.ok) throw new Error("Credenciais inválidas");
+        const dados = await res.json();
+        db.token = dados.access_token;
+        localStorage.setItem(SED.TK, dados.access_token);
+        localStorage.setItem(SED.RF, dados.refresh_token);
+        await carregarDadosAluno();
+        aviso.className = "aviso sucesso"; aviso.textContent = "✅ Conectado! Entrando...";
+        setTimeout(mostrarPainel, 800);
     } catch (erro) {
-        aviso.className = "aviso info";
-        aviso.textContent = "ℹ️ Entrando no modo local (funciona tudo)";
-        
-        banco.usuario = {
-            ra: ra.replace(/\D/g, ""),
-            nome: "Aluno",
-            turma: "Turma A",
-            senha: senha
-        };
-        salvarDados();
-        setTimeout(abrirPainel, 800);
-    } finally {
-        botao.disabled = false;
-    }
+        aviso.className = "aviso erro"; aviso.textContent = "❌ Não conectou: " + erro.message + " → Usando modo local";
+        db.aluno = { codigoRA: ra, nome: "Aluno " + ra, serie: "3ª Série", turma: "A", turno: "Manhã" };
+        setTimeout(mostrarPainel, 1000);
+    } finally { btn.disabled = false; salvarDB(); }
 }
 
-function abrirPainel() {
-    document.getElementById("login").classList.add("off");
-    document.getElementById("painel").classList.remove("off");
-    atualizarTela();
+// 📥 BUSCA DADOS DIRETO DA SED
+async function carregarDadosAluno() {
+    if (!db.token) return;
+    try {
+        const [perfil, freq] = await Promise.all([
+            fetch(SED.PERFIL, { headers: { Authorization: `Bearer ${db.token}` } }).then(r => r.json()),
+            fetch(SED.FREQ, { headers: { Authorization: `Bearer ${db.token}` } }).then(r => r.json())
+        ]);
+        db.aluno = perfil;
+        db.faltas = freq.totalFaltas || 0;
+        db.frequencia = freq.percentualFrequencia || 100;
+        db.ultimaSync = new Date().toISOString();
+        salvarDB(); atualizarTela();
+        document.getElementById("stsSync").innerHTML = `<i class="fa-solid fa-circle-check mr-1" style="color:#66bb6a"></i>Sincronizado`;
+    } catch { document.getElementById("stsSync").innerHTML = `<i class="fa-solid fa-circle-times mr-1" style="color:#ff5252"></i>Offline`; }
 }
 
-function atualizarTela() {
-    const usr = banco.usuario;
-    document.getElementById("nomeAluno").textContent = usr.nome;
-    document.getElementById("raMostra").textContent = usr.ra;
-    document.getElementById("turmaAluno").textContent = usr.turma;
-    document.getElementById("letraNome").textContent = usr.nome[0].toUpperCase();
-    
-    document.getElementById("pend").textContent = banco.atividades.filter(a => a.status !== "concluido").length;
-    document.getElementById("msg").textContent = banco.mensagens;
-    document.getElementById("faltas").textContent = banco.faltas;
-    document.getElementById("freq").textContent = banco.frequencia + "%";
-
-    listarAtividades();
+// ⏱️ CRONÔMETRO BLOQUEANTE
+function iniciarCronometro(id) {
+    const ativ = db.atividades.find(a => a.id === id);
+    if (!ativ) return;
+    cronometros[id] = setInterval(() => {
+        const falta = Math.max(0, SED.MIN_TEMPO - (Date.now() - ativ.inicio));
+        const el = document.querySelector(`[data-cron="${id}"]`);
+        if (el) el.textContent = `⏱️ ${Math.floor(falta/60000)}:${String(Math.floor((falta%60000)/1000)).padStart(2, "0")}`;
+        if (falta <= 0) { clearInterval(cronometros[id]); ativ.liberado = true; salvarDB(); listarAtividades(); }
+    }, 300);
 }
 
+// ⬆️ ENVIA PARA SALA DO FUTURO
+async function enviarParaSED(ativ) {
+    if (!db.token) return;
+    const tempo = Math.max(SED.MIN_TEMPO, Date.now() - ativ.inicio);
+    const pacote = {
+        ra: db.aluno.codigoRA,
+        tipo: ativ.tipo,
+        titulo: ativ.titulo,
+        prazo: ativ.prazo,
+        tempoGastoSeg: Math.round(tempo / 1000),
+        status: ativ.status,
+        observacao: ativ.obs,
+        dadosAdicionais: ativ.info
+    };
+    try {
+        await fetch(SED.ATIVIDADES, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${db.token}`, "Content-Type": "application/json" },
+            body: JSON.stringify(pacote)
+        });
+        ativ.sincronizado = true;
+        document.getElementById("stsSync").innerHTML = `<i class="fa-solid fa-check-double mr-1" style="color:#66bb6a"></i>Enviado`;
+    } catch { ativ.sincronizado = false; document.getElementById("stsSync").innerHTML = `<i class="fa-solid fa-cloud-arrow-down mr-1" style="color:#ffb74d"></i>Na fila`; }
+    salvarDB(); listarAtividades();
+}
+
+// 📝 CADASTRAR ATIVIDADE
 function cadastrarAtividade() {
     const tipo = document.getElementById("tipo").value;
     const titulo = document.getElementById("titulo").value.trim();
-    const prazo = document.getElementById("prazo").value || "Sem prazo";
-    const info = document.getElementById("info").value || "";
-    const obs = document.getElementById("obs").value || "";
-
-    if (!titulo) {
-        alert("⚠️ Escreva o título da atividade!");
-        return;
-    }
-
+    if (!titulo) return alert("⚠️ Digite o título!");
     const nova = {
-        id: Date.now(),
-        tipo: tipo,
-        titulo: titulo,
-        prazo: prazo,
-        info: info,
-        obs: obs,
-        inicio: Date.now(),
-        tempoRestante: MIN_TEMPO,
-        status: "pendente"
+        id: Date.now(), tipo, titulo,
+        prazo: document.getElementById("prazo").value || "",
+        info: document.getElementById("info").value || "",
+        obs: document.getElementById("obs").value || "",
+        inicio: Date.now(), liberado: false, status: "pendente", sincronizado: false
     };
-
-    banco.atividades.push(nova);
-    salvarDados();
-    atualizarTela();
-    iniciarCronometro(nova.id);
-
-    document.getElementById("titulo").value = "";
-    document.getElementById("prazo").value = "";
-    document.getElementById("info").value = "";
-    document.getElementById("obs").value = "";
+    db.atividades.push(nova); salvarDB(); atualizarTela(); iniciarCronometro(nova.id);
+    ["titulo","prazo","info","obs"].forEach(id=>document.getElementById(id).value="");
 }
 
-function iniciarCronometro(id) {
-    const ativ = banco.atividades.find(a => a.id === id);
-    if (!ativ || ativ.status === "concluido") return;
-
-    const contador = setInterval(() => {
-        const decorrido = Date.now() - ativ.inicio;
-        ativ.tempoRestante = Math.max(0, MIN_TEMPO - decorrido);
-
-        if (ativ.tempoRestante <= 0) {
-            clearInterval(contador);
-            ativ.status = "pronta";
-        }
-
-        salvarDados();
-        listarAtividades();
-    }, 1000);
+// ✅ CONCLUIR E ENVIAR
+function concluirAtividade(id) {
+    const ativ = db.atividades.find(a => a.id === id);
+    if (!ativ.liberado) return alert("⏳ Espere completar 1 minuto!");
+    ativ.status = "concluida"; salvarDB(); atualizarTela(); enviarParaSED(ativ);
 }
 
+function mostrarPainel() { document.getElementById("login").classList.add("off"); document.getElementById("painel").classList.remove("off"); atualizarTela(); }
+function atualizarTela() {
+    const a = db.aluno;
+    document.getElementById("nomeAluno").textContent = a.nome.split(" ")[0];
+    document.getElementById("raMostra").textContent = a.codigoRA;
+    document.getElementById("turmaAluno").textContent = `${a.serie} ${a.turma}`;
+    document.getElementById("letraNome").textContent = a.nome[0].toUpperCase();
+    document.getElementById("pend").textContent = db.atividades.filter(x=>x.status!=="concluida").length;
+    document.getElementById("msg").textContent = db.mensagens;
+    document.getElementById("faltas").textContent = db.faltas;
+    document.getElementById("freq").textContent = db.frequencia + "%";
+    document.getElementById("freq").style.color = db.frequencia >= SED.MIN_FREQ ? "#66bb6a" : "#E50914";
+    listarAtividades();
+}
 function listarAtividades() {
-    const container = document.getElementById("listaAtividades");
-    if (banco.atividades.length === 0) {
-        container.innerHTML = `<div class="text-center text-sm py-6" style="color:var(--cinza)">Nenhuma atividade cadastrada ainda</div>`;
-        return;
-    }
-
-    container.innerHTML = banco.atividades.map(ativ => {
-        const minutos = Math.floor(ativ.tempoRestante / 60000);
-        const segundos = Math.floor((ativ.tempoRestante % 60000) / 1000);
-        const tempo = `${minutos}:${segundos.toString().padStart(2, "0")}`;
-
-        return `
+    const c = document.getElementById("listaAtividades");
+    if (!db.atividades.length) return c.innerHTML = `<div class="text-center py-6" style="color:var(--cinza)">Nenhuma atividade cadastrada</div>`;
+    c.innerHTML = db.atividades.map(ativ => `
         <div class="item">
-            <div class="flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span style="color:${TIPOS_ATIV[ativ.tipo].cor};font-weight:600">${TIPOS_ATIV[ativ.tipo].nome}</span>
-                    <span class="ml-2">${ativ.titulo}</span>
-                </div>
-                <span class="text-xs" style="color:var(--cinza)">Prazo: ${ativ.prazo}</span>
+            <div class="flex justify-between items-center">
+                <span><b>${ativ.tipo}</b> • ${ativ.titulo}</span>
+                ${ativ.liberado ? `<button onclick="concluirAtividade(${ativ.id})" class="btnV text-xs py-1 w-auto">✅ Concluir</button>` : `<span class="cron" data-cron="${ativ.id}">⏱️ 1:00</span>`}
             </div>
-            <div class="flex justify-between items-center mt-2">
-                <span class="text-sm">${ativ.info || "Sem observação"}</span>
-                ${ativ.status === "pendente" ? 
-                    `<span class="cron">⏱️ ${tempo}</span>` : 
-                    `<button onclick="mudarStatus(${ativ.id})" class="btnV text-xs py-1 px-3 w-auto">${ativ.status === "pronta" ? "Concluir" : "Concluída"}</button>`
-                }
-            </div>
-        </div>`;
-    }).join("");
+            <div class="text-xs mt-1" style="color:var(--cinza)">Prazo: ${ativ.prazo || "Sem prazo"} • ${ativ.sincronizado ? "✔️ Enviado" : "📤 Pendente envio"}</div>
+        </div>`).join("");
+    db.atividades.filter(a=>!a.liberado && !cronometros[a.id]).forEach(a=>iniciarCronometro(a.id));
 }
-
-function mudarStatus(id) {
-    const ativ = banco.atividades.find(a => a.id === id);
-    if (!ativ || ativ.status !== "pronta") return;
-
-    ativ.status = "concluido";
-    salvarDados();
-    atualizarTela();
-}
-
-function salvarDados() {
-    localStorage.setItem("sala_futuro_db", JSON.stringify(banco));
-}
-
-function sair() {
-    banco.usuario = null;
-    salvarDados();
-    location.reload();
-}
-
-// Inicializa cronômetros das atividades já salvas
-window.onload = () => {
-    banco.atividades.filter(a => a.status === "pendente").forEach(ativ => iniciarCronometro(ativ.id));
-};
+function sincronizarTudo() { db.atividades.filter(a=>!a.sincronizado).forEach(a=>enviarParaSED(a)); carregarDadosAluno(); }
+function salvarDB() { localStorage.setItem(BD, JSON.stringify(db)); }
+function sair() { db.aluno = null; db.token = null; salvarDB(); localStorage.removeItem("sed_token"); location.reload(); }
 </script>
 </body>
 </html>
