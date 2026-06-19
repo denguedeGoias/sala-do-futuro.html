@@ -3,337 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
 <title>Sala do Futuro | SED</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23050505'/%3E%3Ctext x='50' y='68' font-size='62' font-weight='900' fill='%23E50914' text-anchor='middle'%3ESF%3C/text%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
     :root{
-        --preto:#050505;--preto2:#0B0B0B;--card:#111111;
-        --borda:#1C1C1C;--vermelho:#B8000A;--sangue:#E50914;
+        --preto:#050505;--card:#111111;--borda:#1C1C1C;
+        --vermelho:#B8000A;--sangue:#E50914;
         --texto:#EAEAEA;--cinza:#8A8A8A
     }
-    *{scrollbar-width:thin;scrollbar-color:var(--vermelho) var(--preto)}
-    html,body{background:var(--preto);color:var(--texto);font-family:system-ui,sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--vermelho) var(--preto)}
+    html,body{background:var(--preto);color:var(--texto);font-family:system-ui,sans-serif;min-height:100vh}
     .card{background:var(--card);border:1px solid var(--borda);border-radius:14px;border-top:2.5px solid var(--vermelho)}
     .linhaV{height:22px;width:3px;background:var(--vermelho);display:inline-block;margin-right:8px;border-radius:2px}
     .input{background:var(--card);border:1px solid var(--borda);color:#fff;border-radius:10px;padding:12px 14px;width:100%;outline:none}
-    .input:focus{border-color:var(--sangue)}
-    .btnV{background:var(--vermelho);color:#fff;padding:12px;border-radius:10px;font-weight:600;width:100%}
+    .input:focus{border-color:var(--sangue);box-shadow:0 0 0 2px rgba(229,9,20,0.2)}
+    .btnV{background:var(--vermelho);color:#fff;padding:12px;border-radius:10px;font-weight:600;width:100%;border:none;cursor:pointer;transition:background .2s}
     .btnV:hover{background:var(--sangue)}.btnV:disabled{opacity:.4;cursor:not-allowed}
     .stPend{color:#ff5252}.stFaz{color:#ffb74d}.stOk{color:#66bb6a}.bloq{opacity:.5;pointer-events:none}
-    .icone{width:44px;height:44px;background:var(--vermelho);border-radius:10px;display:grid;place-items-center}
+    .icone{width:44px;height:44px;background:var(--vermelho);border-radius:10px;display:grid;place-items:center}
     .item{background:#090909;border:1px solid var(--borda);border-radius:10px;padding:10px 12px;margin-bottom:8px}
     .off{display:none !important}.cron{color:var(--sangue);font-weight:700;font-family:monospace}
+    .aviso{padding:8px 12px;border-radius:8px;margin:8px 0;text-align:center;font-size:13px}
+    .aviso.erro{background:rgba(229,9,20,0.15);border:1px solid rgba(229,9,20,0.3);color:#ff8888}
+    .aviso.info{background:rgba(255,183,77,0.15);border:1px solid rgba(255,183,77,0.3);color:#ffd270}
 </style>
 </head>
 <body class="min-h-screen">
 
-<!-- TELA LOGIN SED -->
+<!-- TELA DE LOGIN -->
 <div id="login" class="min-h-screen grid place-items-center px-4">
     <div class="w-full max-w-sm">
         <div class="text-center mb-8">
             <h1 style="color:var(--sangue);font-size:34px;font-weight:900">SALA DO FUTURO</h1>
-            <p class="text-xs mt-1" style="color:var(--cinza)">Secretaria da Educação • SEDU/SED</p>
+            <p class="text-xs mt-1" style="color:var(--cinza)">Secretaria da Educação • SED</p>
         </div>
         <div class="card p-5">
+            <div id="avisoLogin" class="aviso info mb-3">Digite seu RA e senha da SED para entrar</div>
+            
             <label class="text-xs block mb-1" style="color:var(--cinza)">RA COM DÍGITO E UF</label>
-            <input id="ra" class="input mb-3" placeholder="00000000 0 SP" maxlength="14">
+            <input id="ra" class="input mb-3" placeholder="Ex: 123456789 0 SP" maxlength="15">
+            
             <label class="text-xs block mb-1" style="color:var(--cinza)">SENHA DA SED</label>
-            <input id="senha" type="password" class="input mb-3" placeholder="Mesma do sed.educacao.sp.gov.br">
-            <button onclick="loginSED()" class="btnV" id="btnEntrar">ENTRAR</button>
-            <p id="stsLogin" class="text-[11px] text-center mt-2" style="color:var(--cinza)"></p>
-            <p class="text-[10px] text-center mt-3" style="color:#444">Conexão segura TLS 1.3 • Dados criptografados</p>
+            <input id="senha" type="password" class="input mb-4" placeholder="Mesma senha do portal sed.educacao.sp.gov.br">
+            
+            <button onclick="fazerLogin()" id="btnEntrar" class="btnV">ENTRAR</button>
+            <p class="text-center text-xs mt-3" style="color:var(--cinza)">Se não conectar, entra no modo de uso local</p>
         </div>
     </div>
 </div>
 
-<!-- PAINEL -->
+<!-- PAINEL PRINCIPAL -->
 <div id="painel" class="off">
-    <header class="px-4 pt-5 pb-2 flex items-center justify-between max-w-5xl mx-auto">
-        <span style="color:var(--sangue);font-weight:800">SALA DO FUTURO</span>
+    <header class="px-4 pt-5 pb-3 flex items-center justify-between max-w-5xl mx-auto">
+        <span style="color:var(--sangue);font-weight:800;font-size:18px">SALA DO FUTURO</span>
         <div class="flex items-center gap-2">
-            <span id="stsSync" class="text-[10px]" style="color:var(--cinza)"><i class="fa-solid fa-link mr-1"></i>Conectado SED</span>
-            <button onclick="sair()" class="text-xs px-3 py-1.5 rounded" style="border:1px solid var(--borda);color:var(--cinza)">Sair</button>
+            <span id="stsSync" class="text-xs" style="color:var(--cinza)"><i class="fa-solid fa-circle-check mr-1"></i>Modo Local</span>
+            <button onclick="sair()" class="text-xs px-3 py-1.5 rounded" style="border:1px solid var(--borda);color:var(--cinza);background:transparent">Sair</button>
         </div>
     </header>
 
     <div class="max-w-5xl mx-auto px-4 py-4">
         <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full grid place-items-center font-bold text-xl" style="background:var(--card);border:1px solid var(--borda);color:var(--sangue)" id="letra">J</div>
+            <div class="w-12 h-12 rounded-full grid place-items-center font-bold text-xl" style="background:var(--card);border:1px solid var(--borda);color:var(--sangue)" id="letraNome">A</div>
             <div>
-                <h1 class="text-xl font-bold">Olá, <span id="nomeAluno">—</span></h1>
-                <p class="text-xs" style="color:var(--cinza)"><span id="turmaAluno">—</span> | RA: <span id="raMostra">—</span></p>
+                <h1 class="text-xl font-bold">Olá, <span id="nomeAluno">Aluno</span></h1>
+                <p class="text-sm" style="color:var(--cinza)">RA: <span id="raMostra">00000000</span> • <span id="turmaAluno">Turma 3ºA</span></p>
             </div>
         </div>
     </div>
 
-    <!-- 4 CARDS IGUAL A IMAGEM -->
+    <!-- CARDS RESUMO -->
     <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-3">
         <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-check"></i></div>
-            <div class="text-3xl font-extrabold" id="pend">0</div><div class="text-xs" style="color:var(--cinza)">Pendências</div></div>
+            <div class="text-3xl font-extrabold" id="pend">0</div><div class="text-sm" style="color:var(--cinza)">Pendências</div></div>
         <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-envelope"></i></div>
-            <div class="text-3xl font-extrabold" id="msg">0</div><div class="text-xs" style="color:var(--cinza)">Mensagens não lidas</div></div>
+            <div class="text-3xl font-extrabold" id="msg">0</div><div class="text-sm" style="color:var(--cinza)">Avisos</div></div>
         <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-calendar-xmark"></i></div>
-            <div class="text-3xl font-extrabold" id="faltas">0</div><div class="text-xs" style="color:var(--cinza)">Faltas</div></div>
+            <div class="text-3xl font-extrabold" id="faltas">0</div><div class="text-sm" style="color:var(--cinza)">Faltas</div></div>
         <div class="card p-4"><div class="icone mb-2"><i class="fa-solid fa-chart-line"></i></div>
             <div class="text-3xl font-extrabold" id="freq" style="color:#66bb6a">100%</div>
-            <div class="text-xs" style="color:var(--cinza)">Frequência</div>
-            <div class="text-[11px] mt-1" id="avisoFreq"></div></div>
+            <div class="text-sm" style="color:var(--cinza)">Frequência</div></div>
     </div>
 
-    <!-- FREQUÊNCIA SED -->
-    <div class="max-w-5xl mx-auto px-4 mt-4">
+    <!-- CRIAR ATIVIDADE -->
+    <div class="max-w-5xl mx-auto px-4 mt-6">
         <div class="card p-4">
-            <div class="flex flex-wrap gap-2 items-center">
-                <span class="linhaV"></span><b class="text-sm">FREQUÊNCIA • DIRETO DA SED</b>
-                <span class="text-xs ml-auto" style="color:var(--cinza)">Aulas dadas: <span id="aulasDadas">200</span> • Mínimo 75%</span>
-                <button onclick="sincronizarSED()" class="px-3 py-1.5 rounded text-xs" style="border:1px solid var(--vermelho);color:var(--sangue)"><i class="fa-solid fa-rotate mr-1"></i>ATUALIZAR</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- NOVA ATIVIDADE + REGRA 1 MINUTO -->
-    <div class="max-w-5xl mx-auto px-4 mt-4">
-        <div class="card p-4">
-            <div class="mb-3"><span class="linhaV"></span><b class="text-sm">NOVA ATIVIDADE</b>
-            <span class="text-[11px] ml-2" style="color:var(--cinza)">⏱️ Tempo mínimo obrigatório: <b style="color:var(--sangue)">60s</b> por tarefa — regra oficial Sala do Futuro</span></div>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+            <div class="mb-4"><span class="linhaV"></span><b class="text-base">📝 NOVA ATIVIDADE</b>
+            <span class="text-xs ml-2" style="color:var(--cinza)">⏱️ Tempo mínimo: 60 segundos</span></div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <select id="tipo" class="input">
-                    <option value="tarefa">📋 TAREFA</option>
-                    <option value="matific">➕ MATIFIC</option>
-                    <option value="alura">📘 ALURA</option>
-                    <option value="speak">🗣️ SPEAK</option>
-                    <option value="redacao">✍️ REDAÇÃO</option>
+                    <option value="tarefa">📋 Tarefa Comum</option>
+                    <option value="matific">➕ Matific</option>
+                    <option value="alura">📘 Alura</option>
+                    <option value="speak">🗣️ Speak</option>
+                    <option value="redacao">✍️ Redação</option>
                 </select>
-                <input id="titulo" class="input" placeholder="Título / Tema">
+                <input id="titulo" class="input" placeholder="Título da atividade">
                 <input id="prazo" type="date" class="input">
-                <input id="extra" class="input" placeholder="Ex: 75% / nota 8,5 / 15min">
-                <textarea id="obs" rows="1" class="input md:col-span-3" placeholder="Observação"></textarea>
-                <button onclick="cadastrar()" class="btnV">CADASTRAR</button>
+                <input id="info" class="input" placeholder="Nota / % / Tempo">
+                <textarea id="obs" rows="1" class="input md:col-span-4" placeholder="Observações adicionais..."></textarea>
+                <button onclick="cadastrarAtividade()" class="btnV md:col-span-4">CADASTRAR ATIVIDADE</button>
             </div>
         </div>
     </div>
 
-    <!-- AGENDA + MÓDULOS -->
-    <div class="max-w-5xl mx-auto px-4 mt-4 pb-10">
-        <div class="card p-4 mb-4">
-            <div class="mb-2"><span class="linhaV"></span><b class="text-sm">📅 AGENDA</b></div>
-            <div id="agenda"></div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="modulos"></div>
-        <div class="flex flex-wrap gap-2 mt-5">
-            <button onclick="relatorio()" class="px-4 py-2 rounded text-sm" style="border:1px solid var(--borda)">📄 RELATÓRIO</button>
-            <button onclick="exportar()" class="px-4 py-2 rounded text-sm" style="border:1px solid var(--borda)">💾 EXPORTAR</button>
+    <!-- LISTA DE ATIVIDADES -->
+    <div class="max-w-5xl mx-auto px-4 mt-6 pb-10">
+        <div class="card p-4">
+            <div class="mb-4"><span class="linhaV"></span><b class="text-base">📅 SUAS ATIVIDADES</b></div>
+            <div id="listaAtividades" class="space-y-3">
+                <div class="text-center text-sm py-6" style="color:var(--cinza)">Nenhuma atividade cadastrada ainda</div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-/* =========================================================
-   🔴 CONFIG OFICIAL SERVIDORES SED SP
-   ⏱️ REGRA OBRIGATÓRIA: 60000ms = 1 MINUTO POR TAREFA
-   ✅ CÓDIGO TESTADO • TRATAMENTO DE ERROS • FILA OFFLINE
-   ========================================================= */
-const SED = {
-    AUTH:"https://api.sed.educacao.sp.gov.br/v1/auth/token",
-    PERFIL:"https://api.sed.educacao.sp.gov.br/v1/aluno/perfil",
-    FREQ:"https://api.sed.educacao.sp.gov.br/v1/aluno/frequencia",
-    ATIV:"https://saladofuturo.educacao.sp.gov.br/api/v1/atividades",
-    CLIENT_ID:"SED_SALA_DO_FUTURO_OFICIAL", // pegar oficial na direção
-    MIN_TEMPO:60000, MIN_FREQ:75,
-    TK:"sed_token", RF:"sed_refresh"
+// Configurações gerais
+const MIN_TEMPO = 60000; // 1 minuto em milissegundos
+const TIPOS_ATIV = {
+    tarefa: { nome: "📋 Tarefa", cor: "#4285F4" },
+    matific: { nome: "➕ Matific", cor: "#34A853" },
+    alura: { nome: "📘 Alura", cor: "#9C27B0" },
+    speak: { nome: "🗣️ Speak", cor: "#FF9800" },
+    redacao: { nome: "✍️ Redação", cor: "#00BCD4" }
 };
-const BD="sala_futuro_sed_v2";
-const TIPOS={
-    tarefa:{nome:"📋 TAREFAS",icone:"fa-list-check"},
-    matific:{nome:"➕ MATIFIC",icone:"fa-calculator"},
-    alura:{nome:"📘 ALURA",icone:"fa-book-open"},
-    speak:{nome:"🗣️ SPEAK",icone:"fa-microphone"},
-    redacao:{nome:"✍️ REDAÇÃO",icone:"fa-pen-nib"}
-};
-let db=JSON.parse(localStorage.getItem(BD))||{aluno:null,aulasDadas:200,faltas:0,freq:100,mensagens:2,atividades:[],ultimaSync:null,fila:[]};
-let cronometros={};
 
-/* ========== 🔐 LOGIN SED COM TRATAMENTO ========== */
-async function loginSED(){
-    const ra=document.getElementById('ra').value.trim().replace(/\D/g,'');
-    const senha=document.getElementById('senha').value;
-    const sts=document.getElementById('stsLogin'),btn=document.getElementById('btnEntrar');
-    if(ra.length<6||!senha){sts.innerText="⚠️ Preencha RA e senha";return}
-    sts.innerText="⏳ Conectando servidores SED...";btn.disabled=true;
-    try{
-        const r=await fetch(SED.AUTH,{method:"POST",headers:{"Content-Type":"application/json","client-id":SED.CLIENT_ID},body:JSON.stringify({login:ra,senha,tipo:"ALUNO"})});
-        if(!r.ok) throw "api_off";
-        const t=await r.json();
-        localStorage.setItem(SED.TK,t.access_token);localStorage.setItem(SED.RF,t.refresh_token);
-        await carregarDadosSED();
-        sts.innerHTML='<span style="color:#66bb6a">✅ Autenticado SED</span>';
-        setTimeout(mostrarPainel,700);
-    }catch(e){
-        db.aluno={codigoRA:ra,nomeAluno:document.getElementById('ra').value.toUpperCase()||"ALUNO SED",serie:"3ª SÉRIE",turma:"A",turno:"MANHÃ"};
-        salvar();
-        sts.innerText="⚠️ SED externo indisponível • Modo estrutura oficial • Sincroniza automaticamente quando liberado";
-        setTimeout(mostrarPainel,900);
-    }finally{btn.disabled=false}
-}
-
-/* ========== ⬇️ PUXA DADOS REAIS ========== */
-async function carregarDadosSED(){
-    const tk=localStorage.getItem(SED.TK);if(!tk)return;
-    try{
-        const [p,f]=await Promise.all([
-            fetch(SED.PERFIL,{headers:{Authorization:`Bearer ${tk}`}}).then(r=>r.json()),
-            fetch(SED.FREQ,{headers:{Authorization:`Bearer ${tk}`}}).then(r=>r.json())
-        ]);
-        db.aluno=p;db.aulasDadas=f.totalAulas||200;db.faltas=f.totalFaltas||0;db.freq=f.percentualFrequencia;db.ultimaSync=new Date().toISOString();
-        salvar();atualizaTela();
-        document.getElementById('stsSync').innerHTML='<i class="fa-solid fa-circle-check mr-1" style="color:#66bb6a"></i>Sincronizado '+new Date().toLocaleTimeString('pt-BR');
-        enviarFila();
-    }catch(e){document.getElementById('stsSync').innerText="📴 Offline • último acesso: "+(db.ultimaSync?new Date(db.ultimaSync).toLocaleString('pt-BR'):'—')}
-}
-
-/* ========== ⏱️ AQUI É A REGRA DE 1 MINUTO — NÃO PASSA DISSO ========== */
-function iniciarCronometro(id){
-    const inicio=Date.now();
-    cronometros[id]=setInterval(()=>{
-        const decorrido=Date.now()-inicio;
-        const falta=Math.max(0,SED.MIN_TEMPO-decorrido);
-        const mm=String(Math.floor(falta/60000)).padStart(2,'0');
-        const ss=String(Math.floor((falta%60000)/1000)).padStart(2,'0');
-        const el=document.querySelector(`[data-idc="${id}"]`);
-        if(el) el.innerText=`⏱️ ${mm}:${ss}`;
-        if(falta<=0){
-            clearInterval(cronometros[id]);
-            delete cronometros[id];
-            const it=db.atividades.find(x=>x.id==id);
-            if(it){it.liberado=true;salvar();atualizaTela()}
-        }
-    },250);
-}
-
-function tempoDecorrido(inicio){
-    const t=Date.now()-inicio;
-    return t<SED.MIN_TEMPO?SED.MIN_TEMPO:t; // NUNCA ENVIA < 60s
-}
-
-/* ========== ⬆️ ENVIA PARA SED — SEMPRE COM TEMPO >= 1MIN ========== */
-async function enviarParaSED(a){
-    const tk=localStorage.getItem(SED.TK);
-    const pacote={
-        ra:db.aluno?.codigoRA,tipoPlataforma:a.tipo.toUpperCase(),
-        titulo:a.titulo,prazoEntrega:a.prazo,
-        tempoGastoMs:tempoDecorrido(a.inicioEm), // 👈 GARANTIDO >=60000
-        tempoGastoSeg:Math.ceil(tempoDecorrido(a.inicioEm)/1000),
-        metadados:{extra:a.extra,obs:a.obs},status:a.status,
-        atualizadoEm:new Date().toISOString()
+// Banco de dados local
+let banco = JSON.parse(localStorage.getItem("sala_futuro_db") || "{}");
+if (!banco.atividades) {
+    banco = {
+        usuario: null,
+        atividades: [],
+        faltas: 0,
+        frequencia: 100,
+        mensagens: 1
     };
-    if(!tk){db.fila.push(pacote);salvar();return}
-    try{
-        await fetch(SED.ATIV,{method:"POST",headers:{Authorization:`Bearer ${tk}`,"Content-Type":"application/json"},body:JSON.stringify(pacote)});
-        a.sync=true;a.tempoGastoMs=pacote.tempoGastoMs;salvar();
-    }catch(e){db.fila.push(pacote);salvar()}
+    salvarDados();
 }
-async function enviarFila(){
-    const tk=localStorage.getItem(SED.TK);if(!tk||!db.fila.length)return;
-    for(const p of db.fila){
-        try{await fetch(SED.ATIV,{method:"POST",headers:{Authorization:`Bearer ${tk}`,"Content-Type":"application/json"},body:JSON.stringify(p)})}catch{}
+
+// Função de login
+async function fazerLogin() {
+    const ra = document.getElementById("ra").value.trim();
+    const senha = document.getElementById("senha").value;
+    const aviso = document.getElementById("avisoLogin");
+    const botao = document.getElementById("btnEntrar");
+
+    if (!ra || !senha) {
+        aviso.className = "aviso erro";
+        aviso.textContent = "⚠️ Preencha RA e senha!";
+        return;
     }
-    db.fila=[];salvar();
-}
-setInterval(()=>{if(db.aluno)carregarDadosSED()},300000);
 
-/* ========== DEMAIS FUNÇÕES ========== */
-function salvar(){localStorage.setItem(BD,JSON.stringify(db))}
-function sair(){localStorage.removeItem(SED.TK);localStorage.removeItem(SED.RF);db.aluno=null;salvar();location.reload()}
-function mostrarPainel(){document.getElementById('login').classList.add('off');document.getElementById('painel').classList.remove('off');atualizaTela()}
-function atualizaTela(){
-    if(!db.aluno)return;
-    const a=db.aluno;
-    document.getElementById('nomeAluno').innerText=a.nomeAluno?.split(' ')[0]||"ALUNO";
-    document.getElementById('turmaAluno').innerText=`${a.serie||'3ª SÉRIE'} ${a.turma||'A'} ${a.turno||'MANHÃ'}`;
-    document.getElementById('raMostra').innerText=a.codigoRA;
-    document.getElementById('letra').innerText=(a.nomeAluno||"A")[0];
-    const freq=db.freq||Math.max(0,+(100-(db.faltas/db.aulasDadas*100)).toFixed(1));
-    document.getElementById('pend').innerText=db.atividades.filter(x=>x.status!=='concluido').length;
-    document.getElementById('msg').innerText=db.mensagens;
-    document.getElementById('faltas').innerText=db.faltas;
-    document.getElementById('freq').innerText=freq+"%";
-    document.getElementById('freq').style.color=freq>=SED.MIN_FREQ?"#66bb6a":"#E50914";
-    document.getElementById('aulasDadas').innerText=db.aulasDadas;
-    document.getElementById('avisoFreq').innerHTML=freq<SED.MIN_FREQ?'<span style="color:#E50914">⚠️ Abaixo do mínimo</span>':freq<85?'<span style="color:#ffb74d">Atenção</span>':'<span style="color:#66bb6a">Ok</span>';
-    montaAgenda();montaModulos();
-}
-function cadastrar(){
-    const t=document.getElementById('tipo').value,ti=document.getElementById('titulo').value.trim();
-    const pr=document.getElementById('prazo').value,ex=document.getElementById('extra').value.trim();
-    const ob=document.getElementById('obs').value.trim();
-    if(!ti)return alert("Título obrigatório");
-    const atv={id:Date.now(),tipo:t,titulo:ti,prazo:pr,extra:ex,obs:ob,status:'pendente',inicioEm:Date.now(),liberado:false,sync:false};
-    db.atividades.push(atv);salvar();atualizaTela();
-    iniciarCronometro(atv.id);
-    ['titulo','prazo','extra','obs'].forEach(i=>document.getElementById(i).value='');
-}
-function mudaStatus(id){
-    const it=db.atividades.find(x=>x.id==id);
-    if(it.status!=='concluido' && !it.liberado){alert(`⏱️ Aguardando tempo mínimo\n\nAguarde completar 1 minuto para concluir.\nIsso evita detecção e segue regra oficial.`);return}
-    const o=['pendente','fazendo','concluido'];
-    it.status=o[(o.indexOf(it.status)+1)%3];
-    salvar();atualizaTela();enviarParaSED(it);
-}
-function apaga(id){if(confirm("Apagar atividade?")){db.atividades=db.atividades.filter(x=>x.id!=id);salvar();atualizaTela()}}
-function cor(s){return s==='pendente'?'stPend':s==='fazendo'?'stFaz':'stOk'}
-function tx(s){return{pendente:'Pendente',fazendo:'Andamento',concluido:'Concluído'}[s]}
+    botao.disabled = true;
+    aviso.className = "aviso info";
+    aviso.textContent = "🔄 Tentando conectar com a SED...";
 
-function montaAgenda(){
-    const l=[...db.atividades].sort((a,b)=>(a.prazo||'9999').localeCompare(b.prazo||'9999')).slice(0,8);
-    const el=document.getElementById('agenda');
-    el.innerHTML=!l.length?'<div class="text-xs p-3" style="color:var(--cinza)">Sem atividades</div>':
-    l.map(a=>`<div class="item flex flex-wrap items-center gap-2 text-sm">
-        <b class="text-xs" style="color:var(--sangue)">${TIPOS[a.tipo].nome.split(' ')[0]}</b>
-        <div class="flex-1 min-w-[180px]">${a.titulo}${a.extra?` <span style="color:var(--cinza)">• ${a.extra}</span>`:''}</div>
-        ${!a.liberado?`<span class="cron text-xs" data-idc="${a.id}">⏱️ 01:00</span>`:''}
-        <span class="text-xs" style="color:var(--cinza)">${a.prazo||'s/prazo'}</span>
-        <button onclick="mudaStatus(${a.id})" class="text-xs ${cor(a.status)} ${!a.liberado&&a.status!=='concluido'?'bloq':''}">${tx(a.status)}</button>
-        <button onclick="apaga(${a.id})" class="text-xs" style="color:#ff6b6b">✕</button>
-    </div>`).join('');
-    l.filter(a=>!a.liberado&&!cronometros[a.id]).forEach(a=>iniciarCronometro(a.id));
+    try {
+        // Simula conexão segura
+        await new Promise(resolve => setTimeout(resolve, 1200));
+        
+        // Se não conectar ao servidor, cria usuário local
+        banco.usuario = {
+            ra: ra.replace(/\D/g, ""),
+            nome: "Aluno " + ra.substring(0, 3),
+            turma: "3ª Série A",
+            senha: senha
+        };
+        salvarDados();
+
+        aviso.className = "aviso";
+        aviso.textContent = "✅ Entrando no modo de uso seguro!";
+        setTimeout(abrirPainel, 800);
+
+    } catch (erro) {
+        aviso.className = "aviso info";
+        aviso.textContent = "ℹ️ Entrando no modo local (funciona tudo)";
+        
+        banco.usuario = {
+            ra: ra.replace(/\D/g, ""),
+            nome: "Aluno",
+            turma: "Turma A",
+            senha: senha
+        };
+        salvarDados();
+        setTimeout(abrirPainel, 800);
+    } finally {
+        botao.disabled = false;
+    }
 }
-function montaModulos(){
-    const el=document.getElementById('modulos');el.innerHTML='';
-    Object.entries(TIPOS).forEach(([k,v])=>{
-        const ls=db.atividades.filter(a=>a.tipo===k);
-        const c=ls.filter(a=>a.status==='concluido').length;
-        const p=ls.length?Math.round(c/ls.length*100):0;
-        el.innerHTML+=`<div class="card p-4">
-            <div class="flex items-center justify-between mb-2">
-                <b><i class="fa-solid ${v.icone} mr-2" style="color:var(--sangue)"></i>${v.nome}</b>
-                <span class="text-xs">${c}/${ls.length} • ${p}%</span>
-            </div>
-            <div class="h-1 rounded mb-3" style="background:#1a1a1a"><div class="h-full rounded" style="width:${p}%;background:var(--vermelho)"></div></div>
-            ${!ls.length?'<div class="text-xs p-2" style="color:var(--cinza)">Nenhum registro</div>':
-            ls.map(a=>`<div class="item text-sm">
-                <div class="flex justify-between">
-                    <span>${a.titulo}</span>
-                    ${!a.liberado?`<span class="cron text-[10px]" data-idc="${a.id}">⏱️ 01:00</span>`:''}
-                    <button onclick="mudaStatus(${a.id})" class="text-xs ${cor(a.status)} ${!a.liberado&&a.status!=='concluido'?'bloq':''}">${tx(a.status)}</button>
+
+function abrirPainel() {
+    document.getElementById("login").classList.add("off");
+    document.getElementById("painel").classList.remove("off");
+    atualizarTela();
+}
+
+function atualizarTela() {
+    const usr = banco.usuario;
+    document.getElementById("nomeAluno").textContent = usr.nome;
+    document.getElementById("raMostra").textContent = usr.ra;
+    document.getElementById("turmaAluno").textContent = usr.turma;
+    document.getElementById("letraNome").textContent = usr.nome[0].toUpperCase();
+    
+    document.getElementById("pend").textContent = banco.atividades.filter(a => a.status !== "concluido").length;
+    document.getElementById("msg").textContent = banco.mensagens;
+    document.getElementById("faltas").textContent = banco.faltas;
+    document.getElementById("freq").textContent = banco.frequencia + "%";
+
+    listarAtividades();
+}
+
+function cadastrarAtividade() {
+    const tipo = document.getElementById("tipo").value;
+    const titulo = document.getElementById("titulo").value.trim();
+    const prazo = document.getElementById("prazo").value || "Sem prazo";
+    const info = document.getElementById("info").value || "";
+    const obs = document.getElementById("obs").value || "";
+
+    if (!titulo) {
+        alert("⚠️ Escreva o título da atividade!");
+        return;
+    }
+
+    const nova = {
+        id: Date.now(),
+        tipo: tipo,
+        titulo: titulo,
+        prazo: prazo,
+        info: info,
+        obs: obs,
+        inicio: Date.now(),
+        tempoRestante: MIN_TEMPO,
+        status: "pendente"
+    };
+
+    banco.atividades.push(nova);
+    salvarDados();
+    atualizarTela();
+    iniciarCronometro(nova.id);
+
+    document.getElementById("titulo").value = "";
+    document.getElementById("prazo").value = "";
+    document.getElementById("info").value = "";
+    document.getElementById("obs").value = "";
+}
+
+function iniciarCronometro(id) {
+    const ativ = banco.atividades.find(a => a.id === id);
+    if (!ativ || ativ.status === "concluido") return;
+
+    const contador = setInterval(() => {
+        const decorrido = Date.now() - ativ.inicio;
+        ativ.tempoRestante = Math.max(0, MIN_TEMPO - decorrido);
+
+        if (ativ.tempoRestante <= 0) {
+            clearInterval(contador);
+            ativ.status = "pronta";
+        }
+
+        salvarDados();
+        listarAtividades();
+    }, 1000);
+}
+
+function listarAtividades() {
+    const container = document.getElementById("listaAtividades");
+    if (banco.atividades.length === 0) {
+        container.innerHTML = `<div class="text-center text-sm py-6" style="color:var(--cinza)">Nenhuma atividade cadastrada ainda</div>`;
+        return;
+    }
+
+    container.innerHTML = banco.atividades.map(ativ => {
+        const minutos = Math.floor(ativ.tempoRestante / 60000);
+        const segundos = Math.floor((ativ.tempoRestante % 60000) / 1000);
+        const tempo = `${minutos}:${segundos.toString().padStart(2, "0")}`;
+
+        return `
+        <div class="item">
+            <div class="flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span style="color:${TIPOS_ATIV[ativ.tipo].cor};font-weight:600">${TIPOS_ATIV[ativ.tipo].nome}</span>
+                    <span class="ml-2">${ativ.titulo}</span>
                 </div>
-                ${a.extra?`<div class="text-[11px]" style="color:var(--cinza)">${a.extra}</div>`:''}
-            </div>`).join('')}
+                <span class="text-xs" style="color:var(--cinza)">Prazo: ${ativ.prazo}</span>
+            </div>
+            <div class="flex justify-between items-center mt-2">
+                <span class="text-sm">${ativ.info || "Sem observação"}</span>
+                ${ativ.status === "pendente" ? 
+                    `<span class="cron">⏱️ ${tempo}</span>` : 
+                    `<button onclick="mudarStatus(${ativ.id})" class="btnV text-xs py-1 px-3 w-auto">${ativ.status === "pronta" ? "Concluir" : "Concluída"}</button>`
+                }
+            </div>
         </div>`;
-    });
-    db.atividades.filter(a=>!a.liberado&&!cronometros[a.id]).forEach(a=>iniciarCronometro(a.id));
+    }).join("");
 }
-function relatorio(){
-    const w=window.open('','_blank');
-    w.document.write(`<html><head><title>Relatório</title><style>body{background:#000;color:#fff;padding:30px}h2{color:#E50914}.i{padding:8px;border-bottom:1px solid #222}</style></head><body>`);
-    w.document.write(`<h1>SALA DO FUTURO</h1><p>Aluno: ${db.aluno.nomeAluno} | RA: ${db.aluno.codigoRA} | ${db.aluno.serie} ${db.aluno.turma}</p>`);
-    w.document.write(`<p>Faltas: ${db.faltas} | Frequência: ${db.freq}%</p><hr>`);
-    Object.entries(TIPOS).forEach(([k,v])=>{
-        w.document.write(`<h2>${v.nome}</h2>`);
-        db.atividades.filter(a=>a.tipo===k).forEach(x=>w.document.write(`<div class="i">${x.titulo} — ${x.prazo||'s/prazo'} — ${tx(x.status)} — ${Math.ceil((x.tempoGastoMs||60000)/1000)}s</div>`));
-    });
-    w.document.write(`</body></html>`);w.document.close();
+
+function mudarStatus(id) {
+    const ativ = banco.atividades.find(a => a.id === id);
+    if (!ativ || ativ.status !== "pronta") return;
+
+    ativ.status = "concluido";
+    salvarDados();
+    atualizarTela();
 }
-function exportar(){
-    const b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
-    const a=document.cre
+
+function salvarDados() {
+    localStorage.setItem("sala_futuro_db", JSON.stringify(banco));
+}
+
+function sair() {
+    banco.usuario = null;
+    salvarDados();
+    location.reload();
+}
+
+// Inicializa cronômetros das atividades já salvas
+window.onload = () => {
+    banco.atividades.filter(a => a.status === "pendente").forEach(ativ => iniciarCronometro(ativ.id));
+};
+</script>
+</body>
+</html>
