@@ -332,6 +332,7 @@
 const SERVIDOR_API = "https://crimsonzerohub.xyz/api/v1/";
 let dadosUsuario = null;
 let atualizacaoAutomatica = null;
+let tokenSessao = null; // 🔐 Usar token em vez de credenciais
 
 // 🚀 Login e carregamento de dados
 async function iniciarSessao() {
@@ -346,6 +347,7 @@ async function iniciarSessao() {
     try {
         const botaoEntrar = document.querySelector(".btn");
         botaoEntrar.textContent = "Conectando...";
+        botaoEntrar.disabled = true;
 
         // Requisição ao servidor com os dados do aluno
         const resposta = await fetch(`${SERVIDOR_API}login`, {
@@ -354,14 +356,22 @@ async function iniciarSessao() {
             body: JSON.stringify({ ra: ra, senha: senha })
         });
 
+        if (!resposta.ok) {
+            throw new Error(`Erro HTTP: ${resposta.status}`);
+        }
+
         const dadosServidor = await resposta.json();
 
-        if (!dadosServidor.sucesso) throw new Error(dadosServidor.mensagem || "RA ou senha incorretos");
+        if (!dadosServidor.sucesso) {
+            throw new Error(dadosServidor.mensagem || "RA ou senha incorretos");
+        }
+
+        // Salva token em vez de credenciais (mais seguro)
+        tokenSessao = dadosServidor.token || null;
 
         // Salva todos os dados recebidos
         dadosUsuario = {
             ra: ra,
-            senha: senha,
             nome: dadosServidor.nome,
             serie: dadosServidor.serie,
             pendencias: dadosServidor.pendencias || 0,
@@ -372,14 +382,20 @@ async function iniciarSessao() {
             redacoes: dadosServidor.redacoes || []
         };
 
+        // 🔐 LIMPA campos de entrada após login
+        document.getElementById("campoRA").value = "";
+        document.getElementById("campoSenha").value = "";
+
         abrirSistema();
         iniciarSincronizacao();
         alert("✅ Conectado! Dados carregados com sucesso.");
 
     } catch (erro) {
-        console.log("Erro de conexão:", erro);
-        alert("⚠️ Não foi possível conectar. Verifique seus dados.");
-        document.querySelector(".btn").textContent = "Entrar e Sincronizar";
+        console.error("Erro de conexão:", erro);
+        alert("⚠️ Não foi possível conectar. Verifique seus dados.\n\nDetalhes: " + erro.message);
+    } finally {
+        botaoEntrar.textContent = "Entrar e Sincronizar";
+        botaoEntrar.disabled = false;
     }
 }
 
@@ -419,54 +435,104 @@ function atualizarTodosOsDados() {
 function iniciarSincronizacao() {
     if (atualizacaoAutomatica) clearInterval(atualizacaoAutomatica);
     atualizacaoAutomatica = setInterval(async () => {
-        if (!dadosUsuario) return;
+        if (!dadosUsuario || !tokenSessao) return;
         try {
             const res = await fetch(`${SERVIDOR_API}atualizar`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ra: dadosUsuario.ra, senha: dadosUsuario.senha })
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${tokenSessao}`
+                },
+                body: JSON.stringify({ ra: dadosUsuario.ra })
             });
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
             const novosDados = await res.json();
-            if (novosDados.sucesso) {
+            if (novosDados.sucesso && novosDados.dados) {
                 dadosUsuario = { ...dadosUsuario, ...novosDados.dados };
                 atualizarTodosOsDados();
             }
-        } catch {}
+        } catch (erro) {
+            console.warn("Erro na sincronização automática:", erro);
+        }
     }, 5000);
 }
 
-// 🔀 Troca de abas
-function mudarAba(nome) {
+// 🔀 Troca de abas (CORRIGIDO)
+function mudarAba(nomeAba) {
+    // Remove classe ativo de todos os botões e conteúdos
     document.querySelectorAll(".botao-aba").forEach(btn => btn.classList.remove("ativo"));
     document.querySelectorAll(".conteudo-aba").forEach(div => div.classList.remove("ativo"));
 
-    event.currentTarget.classList.add("ativo");
-    document.getElementById(`aba${nome.charAt(0).toUpperCase() + nome.slice(1)}`).classList.add("ativo");
+    // Adiciona classe ativo ao botão clicado
+    event.target.classList.add("ativo");
+
+    // Mapeia nomes das abas para IDs dos elementos
+    const mapaAbas = {
+        'inicio': 'abaInicio',
+        'tarefas': 'abaTarefas',
+        'redacao': 'abaRedacao'
+    };
+
+    const idAba = mapaAbas[nomeAba];
+    if (idAba) {
+        const aba = document.getElementById(idAba);
+        if (aba) {
+            aba.classList.add("ativo");
+        }
+    }
 }
 
 // 📥 Busca atividades do servidor
 async function buscarAtividades() {
+    if (!dadosUsuario || !tokenSessao) {
+        alert("⚠️ Erro: Sessão inválida!");
+        return;
+    }
+
     document.getElementById("listaTarefas").innerHTML = "<p style='color: var(--texto-suave);'>Buscando tarefas...</p>";
     try {
-        const res = await fetch(`${SERVIDOR_API}tarefas?ra=${dadosUsuario.ra}&senha=${dadosUsuario.senha}`);
+        const res = await fetch(`${SERVIDOR_API}tarefas?ra=${dadosUsuario.ra}`, {
+            headers: {
+                "Authorization": `Bearer ${tokenSessao}`
+            }
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
         const dados = await res.json();
         dadosUsuario.tarefas = dados.lista || [];
-        atualizarTodosOsDados();
-    } catch {
-        document.getElementById("listaTarefas").innerHTML = "<p style='color: var(--amarelo);'>Erro ao buscar atividades.</p>";
+        listarAtividades();
+    } catch (erro) {
+        console.error("Erro ao buscar atividades:", erro);
+        document.getElementById("listaTarefas").innerHTML = "<p style='color: var(--amarelo);'>❌ Erro ao buscar atividades.</p>";
     }
 }
 
 // 📥 Busca temas de redação
 async function buscarRedacoes() {
+    if (!dadosUsuario || !tokenSessao) {
+        alert("⚠️ Erro: Sessão inválida!");
+        return;
+    }
+
     document.getElementById("listaRedacoes").innerHTML = "<p style='color: var(--texto-suave);'>Buscando temas...</p>";
     try {
-        const res = await fetch(`${SERVIDOR_API}redacoes?ra=${dadosUsuario.ra}&senha=${dadosUsuario.senha}`);
+        const res = await fetch(`${SERVIDOR_API}redacoes?ra=${dadosUsuario.ra}`, {
+            headers: {
+                "Authorization": `Bearer ${tokenSessao}`
+            }
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
         const dados = await res.json();
         dadosUsuario.redacoes = dados.lista || [];
-        atualizarTodosOsDados();
-    } catch {
-        document.getElementById("listaRedacoes").innerHTML = "<p style='color: var(--amarelo);'>Erro ao buscar redações.</p>";
+        listarRedacoes();
+    } catch (erro) {
+        console.error("Erro ao buscar redações:", erro);
+        document.getElementById("listaRedacoes").innerHTML = "<p style='color: var(--amarelo);'>❌ Erro ao buscar redações.</p>";
     }
 }
 
@@ -481,7 +547,7 @@ function resolverTodasTarefas() {
         if (tarefa.status !== "concluida") {
             tarefa.resposta = `Resposta elaborada conforme o conteúdo da Sala do Futuro:\n\n${tarefa.descricao}\n\nResposta completa e adequada ao nível da atividade.`;
             tarefa.status = "concluida";
-            dadosUsuario.pendencias--;
+            dadosUsuario.pendencias = Math.max(0, dadosUsuario.pendencias - 1);
         }
     });
 
@@ -501,7 +567,7 @@ function resolverTodasRedacoes() {
         if (redacao.status !== "concluida") {
             redacao.texto = gerarTextoRedacao(redacao.tema);
             redacao.status = "concluida";
-            dadosUsuario.pendencias--;
+            dadosUsuario.pendencias = Math.max(0, dadosUsuario.pendencias - 1);
         }
     });
 
@@ -528,26 +594,33 @@ Portanto, conclui-se que o tema deve ser estudado com atenção, visando sempre 
 
 // 📤 Envia alterações para o servidor
 async function enviarAlteracoes() {
+    if (!tokenSessao) return;
+
     try {
         await fetch(`${SERVIDOR_API}salvar`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenSessao}`
+            },
             body: JSON.stringify(dadosUsuario)
         });
-    } catch {}
+    } catch (erro) {
+        console.error("Erro ao enviar alterações:", erro);
+    }
 }
 
 // 📋 Exibe lista de tarefas
 function listarAtividades() {
     const container = document.getElementById("listaTarefas");
-    if (!dadosUsuario.tarefas.length) {
+    if (!dadosUsuario.tarefas || !dadosUsuario.tarefas.length) {
         container.innerHTML = "<p style='color: var(--texto-suave);'>Nenhuma tarefa encontrada.</p>";
         return;
     }
 
     container.innerHTML = dadosUsuario.tarefas.map(item => `
         <div class="item-atividade">
-            <h4>${item.titulo}</h4>
+            <h4>${item.titulo || "Sem título"}</h4>
             <p>${item.descricao || "Sem descrição"}</p>
             <p>Prazo: ${item.prazo ? new Date(item.prazo).toLocaleDateString("pt-BR") : "Sem prazo"}</p>
             <p class="status" style="color: ${item.status === "concluida" ? "var(--verde)" : "var(--amarelo)"};">
@@ -560,16 +633,16 @@ function listarAtividades() {
 // 📋 Exibe lista de redações
 function listarRedacoes() {
     const container = document.getElementById("listaRedacoes");
-    if (!dadosUsuario.redacoes.length) {
+    if (!dadosUsuario.redacoes || !dadosUsuario.redacoes.length) {
         container.innerHTML = "<p style='color: var(--texto-suave);'>Nenhuma redação encontrada.</p>";
         return;
     }
 
     container.innerHTML = dadosUsuario.redacoes.map(item => `
         <div class="item-atividade">
-            <h4>Tema: ${item.tema}</h4>
+            <h4>Tema: ${item.tema || "Sem tema"}</h4>
             <p>Prazo: ${item.prazo ? new Date(item.prazo).toLocaleDateString("pt-BR") : "Sem prazo"}</p>
-            <p class="status" style="color: ${item.status === "concluida" ? "var(--verde)" : "var(--amarelo)"};">
+            <p class="status" style="color: ${item.status === "concluida" ? "var(--verde)" : "var(--amarelo);}">
                 ${item.status === "concluida" ? "✅ Concluída" : "⏳ Pendente"}
             </p>
         </div>
