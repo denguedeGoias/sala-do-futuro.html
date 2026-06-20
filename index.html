@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala do Futuro</title>
+    <style>
+        :root {--preto:#000; --preto-card:#121212; --preto-claro:#1E1E1E; --vermelho:#E50914; --cinza:#2A2A2A; --texto:#FFF; --texto-suave:#AAA; --verde:#22C55E; --amarelo:#F59E0B;}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+        body{background:var(--preto);color:var(--texto);padding:20px;}
+        .tela{max-width:450px;margin:0 auto;}
+        .card{background:var(--preto-card);border-radius:10px;padding:20px;margin-bottom:20px;border:1px solid var(--cinza);}
+        h1{text-align:center;color:var(--vermelho);margin-bottom:20px;font-size:26px;}
+        label{display:block;margin:15px 0 5px;color:var(--texto);}
+        input{width:100%;padding:12px;background:var(--preto-claro);border:1px solid var(--cinza);border-radius:6px;color:var(--texto);font-size:16px;}
+        button{width:100%;padding:14px;margin-top:20px;background:var(--vermelho);border:none;border-radius:6px;color:white;font-size:17px;font-weight:bold;cursor:pointer;}
+        .painel{display:none;}
+        .info-topo{display:flex;gap:15px;align-items:center;margin-bottom:20px;}
+        .inicial{width:50px;height:50px;border-radius:50%;background:var(--vermelho);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+        .item-card{background:var(--preto-claro);padding:15px;border-radius:8px;text-align:center;}
+        .numero{font-size:28px;font-weight:bold;margin:8px 0;}
+        .abas{display:flex;gap:10px;margin-bottom:15px;overflow-x:auto;}
+        .aba{padding:10px 15px;background:var(--preto-claro);border-radius:6px;text-align:center;cursor:pointer;}
+        .aba.ativo{background:var(--vermelho);}
+        .conteudo{display:none;}
+        .conteudo.ativo{display:block;}
+        .atividade{background:var(--preto-claro);border-left:4px solid var(--vermelho);padding:15px;margin:12px 0;border-radius:6px;}
+    </style>
+</head>
+<body>
+
+<div class="tela" id="telaLogin">
+    <div class="card">
+        <h1>SALA DO FUTURO</h1>
+        <label>RA:</label>
+        <input type="text" id="ra" placeholder="Digite seu RA">
+        <label>Senha:</label>
+        <input type="password" id="senha" placeholder="Senha da Sala do Futuro">
+        <button onclick="conectar()">ENTRAR</button>
+    </div>
+</div>
+
+<div class="tela painel" id="painel">
+    <div class="card info-topo">
+        <div class="inicial" id="letra">?</div>
+        <div><h2 id="nome">Carregando...</h2><p id="serie">---</p></div>
+    </div>
+    <div class="grid">
+        <div class="item-card"><div class="numero" id="pendentes">0</div><p class="desc">Pendentes</p></div>
+        <div class="item-card"><div class="numero" id="faltas">0</div><p class="desc">Faltas</p></div>
+        <div class="item-card"><div class="numero" id="frequencia">0%</div><p class="desc">Frequência</p></div>
+    </div>
+    <div class="abas">
+        <div class="aba ativo" onclick="mudarAba('inicio')">Início</div>
+        <div class="aba" onclick="mudarAba('tarefas')">Tarefas</div>
+        <div class="aba" onclick="mudarAba('redacao')">Redação</div>
+    </div>
+    <div class="card conteudo ativo" id="abaInicio"><p style="color:var(--texto-suave);">Aguardando servidor...</p></div>
+    <div class="card conteudo" id="abaTarefas">
+        <button onclick="buscarTarefas()">🔍 Buscar Tarefas</button>
+        <button onclick="resolverTarefas()" style="margin-top:10px;">⚡ Resolver e Enviar</button>
+        <div id="listaTarefas" style="margin-top:15px;"></div>
+    </div>
+    <div class="card conteudo" id="abaRedacao">
+        <button onclick="buscarRedacoes()">🔍 Buscar Temas</button>
+        <button onclick="gerarRedacoes()" style="margin-top:10px;">✍️ Gerar e Enviar</button>
+        <div id="listaRedacoes" style="margin-top:15px;"></div>
+    </div>
+</div>
+
+<script>
+// 👇 Coloque o link do servidor do Render aqui depois
+const SERVIDOR = "COLOQUE_AQUI_O_LINK";
+
+let usuario = null;
+
+async function conectar() {
+    const ra = document.getElementById("ra").value.trim();
+    const senha = document.getElementById("senha").value.trim();
+    if (!ra || !senha) return alert("Preencha RA e senha!");
+    try {
+        const res = await fetch(`${SERVIDOR}/login`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({ra, senha})
+        });
+        const dados = await res.json();
+        if (!dados.sucesso) throw new Error(dados.mensagem);
+        usuario = dados.usuario;
+        abrirPainel();
+    } catch (e) { alert("Erro: "+e.message); }
+}
+
+function abrirPainel() {
+    document.getElementById("telaLogin").style.display = "none";
+    document.getElementById("painel").style.display = "block";
+    document.getElementById("letra").textContent = usuario.nome.charAt(0).toUpperCase();
+    document.getElementById("nome").textContent = usuario.nome;
+    document.getElementById("serie").textContent = usuario.serie || "";
+    atualizarDados();
+}
+
+function atualizarDados() {
+    document.getElementById("pendentes").textContent = usuario.pendentes || 0;
+    document.getElementById("faltas").textContent = usuario.faltas || 0;
+    document.getElementById("frequencia").textContent = `${usuario.frequencia || 0}%`;
+}
+
+function mudarAba(nome) {
+    document.querySelectorAll(".aba").forEach(a=>a.classList.remove("ativo"));
+    document.querySelectorAll(".conteudo").forEach(c=>c.classList.remove("ativo"));
+    event.target.classList.add("ativo");
+    document.getElementById(`aba${nome.charAt(0).toUpperCase()+nome.slice(1)}`).classList.add("ativo");
+}
+
+async function buscarTarefas() {
+    const div = document.getElementById("listaTarefas");
+    div.innerHTML = "<p>Carregando...</p>";
+    try {
+        const res = await fetch(`${SERVIDOR}/tarefas`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({ra:usuario.ra, senha:usuario.senha})
+        });
+        usuario.tarefas = (await res.json()).lista || [];
+        listarTarefas();
+    } catch { div.innerHTML = "<p style='color:var(--amarelo)'>Erro ao carregar</p>"; }
+}
+
+async function buscarRedacoes() {
+    const div = document.getElementById("listaRedacoes");
+    div.innerHTML = "<p>Carregando...</p>";
+    try {
+        const res = await fetch(`${SERVIDOR}/redacoes`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({ra:usuario.ra, senha:usuario.senha})
+        });
+        usuario.redacoes = (await res.json()).lista || [];
+        listarRedacoes();
+    } catch { div.innerHTML = "<p style='color:var(--amarelo)'>Erro ao carregar</p>"; }
+}
+
+function listarTarefas() {
+    document.getElementById("listaTarefas").innerHTML = usuario.tarefas.map(t=>`
+        <div class="atividade">
+            <h4>${t.titulo}</h4>
+            <p>${t.descricao||""}</p>
+            <p>Status: <span style="color:${t.concluida?'var(--verde)':'var(--amarelo)'}">${t.concluida?"✅ Concluída":"⏳ Pendente"}</span></p>
+        </div>`).join("");
+}
+
+function listarRedacoes() {
+    document.getElementById("listaRedacoes").innerHTML = usuario.redacoes.map(r=>`
+        <div class="atividade">
+            <h4>Tema: ${r.tema}</h4>
+            <p>Status: <span style="color:${r.concluida?'var(--verde)':'var(--amarelo)'}">${r.concluida?"✅ Enviada":"⏳ Pendente"}</span></p>
+        </div>`).join("");
+}
+
+async function resolverTarefas() {
+    if (!usuario.tarefas?.length) return alert("Busque as tarefas primeiro!");
+    for (let t of usuario.tarefas) {
+        if (!t.concluida) {
+            t.resposta = `Resposta: ${t.titulo}\n\n${t.descricao}\n\nConteúdo elaborado conforme o tema solicitado.`;
+            await fetch(`${SERVIDOR}/enviar-tarefa`, {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({ra:usuario.ra, senha:usuario.senha, id:t.id, resposta:t.resposta})
+            });
+            t.concluida = true;
+        }
+    }
+    listarTarefas();
+    alert("✅ Tarefas enviadas!");
+}
+
+async function gerarRedacoes() {
+    if (!usuario.redacoes?.length) return alert("Busque os temas primeiro!");
+    for (let r of usuario.redacoes) {
+        if (!r.concluida) {
+            r.texto = `Redação sobre: ${r.tema}\n\nIntrodução\nO tema é relevante e aborda pontos importantes para o aprendizado.\n\nDesenvolvimento\nEle traz reflexões sobre o contexto atual e os conceitos estudados.\n\nConclusão\nCompreender esse assunto ajuda a formar uma visão mais ampla.`;
+            await fetch(`${SERVIDOR}/enviar-redacao`, {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({ra:usuario.ra, senha:usuario.senha, id:r.id, texto:r.texto})
+            });
+            r.concluida = true;
+        }
+    }
+    listarRedacoes();
+    alert("✅ Redações enviadas!");
+}
+</script>
+
+</body>interface limpa
+</html>
