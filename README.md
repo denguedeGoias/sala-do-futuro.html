@@ -12,7 +12,6 @@
             --vermelho-brilho: rgba(255, 0, 34, 0.6);
             --texto-branco: #ffffff;
             --texto-claro: #eeeeee;
-            --cinza-escuro: #111111;
         }
 
         * {
@@ -74,17 +73,6 @@
         input:focus, select:focus {
             box-shadow: 0 0 8px var(--vermelho-brilho);
             border-color: #ff3344;
-        }
-
-        /* Área do CAPTCHA */
-        .area-captcha {
-            margin-top: 20px;
-            padding: 16px;
-            background: var(--cinza-escuro);
-            border: 1px dashed var(--vermelho-principal);
-            border-radius: 8px;
-            text-align: center;
-            color: #cccccc;
         }
 
         button {
@@ -264,14 +252,6 @@
         <label>Senha:</label>
         <input type="password" id="senha" placeholder="Digite sua senha">
 
-        <!-- Área reservada para CAPTCHA/verificador de robô -->
-        <div class="area-captcha">
-            <p>🔍 Verificação de segurança</p>
-            <small>Área para o CAPTCHA ou código de confirmação</small>
-            <br>
-            <input type="text" id="captcha" placeholder="Digite o código da imagem" style="margin-top:10px;">
-        </div>
-
         <button onclick="conectar()">ENTRAR</button>
     </div>
 </div>
@@ -342,18 +322,16 @@ async function conectar() {
     const uf = document.getElementById("uf").value.trim();
     const ra = document.getElementById("ra").value.trim();
     const senha = document.getElementById("senha").value.trim();
-    const captcha = document.getElementById("captcha").value.trim();
 
     if (!uf || !ra || !senha) {
         return alert("Preencha UF, RA e Senha!");
     }
 
-    // Se no futuro precisar do CAPTCHA, ele já está sendo enviado
     try {
         const res = await fetch(`${SERVIDOR}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ uf, ra, senha, captcha })
+            body: JSON.stringify({ uf, ra, senha })
         });
         const dados = await res.json();
         if (!dados.sucesso) throw new Error(dados.mensagem);
@@ -472,4 +450,5 @@ async function gerarRedacoes() {
 </script>
 
 </body>
-</html> criado por dengue de Goiás
+</html>
+criado por dengue de Goiás
