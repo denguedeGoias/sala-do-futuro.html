@@ -3,306 +3,473 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sala do Futuro - GitHub</title>
+    <title>Sala do Futuro</title>
     <style>
         :root {
-            --preto: #000000;
-            --preto-card: #121212;
-            --preto-claro: #1E1E1E;
-            --vermelho: #E50914;
-            --vermelho-escuro: #B00006;
-            --cinza: #2A2A2A;
-            --texto: #FFFFFF;
-            --texto-suave: #AAAAAA;
-            --verde: #22C55E;
-            --amarelo: #F59E0B;
+            --preto-fundo: #000000;
+            --vermelho-principal: #ff0022;
+            --vermelho-escuro: #220005;
+            --vermelho-brilho: rgba(255, 0, 34, 0.6);
+            --texto-branco: #ffffff;
+            --texto-claro: #eeeeee;
+            --cinza-escuro: #111111;
         }
-        * {margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;}
-        body {background: var(--preto); color: var(--texto); padding: 20px;}
 
-        .tela {max-width: 450px; margin: 0 auto;}
-        .card {background: var(--preto-card); border-radius: 10px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--cinza);}
-        h1 {text-align: center; color: var(--vermelho); margin-bottom: 20px; font-size: 26px;}
-        label {display: block; margin: 15px 0 5px; color: var(--texto); font-size: 15px;}
-        input {width: 100%; padding: 12px; background: var(--preto-claro); border: 1px solid var(--cinza); border-radius: 6px; color: var(--texto); font-size: 16px;}
-        button {width: 100%; padding: 14px; margin-top: 20px; background: var(--vermelho); border: none; border-radius: 6px; color: white; font-size: 17px; font-weight: bold; cursor: pointer;}
-        button:active {background: var(--vermelho-escuro);}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
 
-        .painel {display: none;}
-        .info-topo {display: flex; gap: 15px; align-items: center; margin-bottom: 20px;}
-        .inicial {width: 50px; height: 50px; border-radius: 50%; background: var(--vermelho); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold;}
-        .grid {display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;}
-        .item-card {background: var(--preto-claro); padding: 15px; border-radius: 8px; text-align: center;}
-        .numero {font-size: 28px; font-weight: bold; margin: 8px 0;}
-        .desc {font-size: 14px; color: var(--texto-suave);}
-        .abas {display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;}
-        .aba {padding: 10px 15px; background: var(--preto-claro); border-radius: 6px; text-align: center; font-size: 15px; white-space: nowrap;}
-        .aba.ativo {background: var(--vermelho);}
-        .conteudo {display: none;}
-        .conteudo.ativo {display: block;}
-        .atividade {background: var(--preto-claro); border-left: 4px solid var(--vermelho); padding: 15px; margin: 12px 0; border-radius: 6px;}
-        .atividade h4 {margin-bottom: 8px; font-size: 16px;}
-        .atividade p {margin: 5px 0; font-size: 14px; color: var(--texto-suave);}
+        body {
+            background: var(--preto-fundo);
+            color: var(--texto-branco);
+            min-height: 100vh;
+            padding: 24px 16px;
+        }
+
+        .tela {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Card de Login */
+        .card-login {
+            background: linear-gradient(145deg, #0a0002, #120003);
+            border: 1px solid var(--vermelho-principal);
+            box-shadow: 0 0 12px var(--vermelho-brilho);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: var(--vermelho-principal);
+            margin-bottom: 28px;
+            font-weight: 700;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin: 16px 0 6px;
+            color: var(--texto-claro);
+            font-size: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            background: #0a0002;
+            border: 1px solid var(--vermelho-principal);
+            border-radius: 8px;
+            color: var(--texto-branco);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 8px var(--vermelho-brilho);
+            border-color: #ff3344;
+        }
+
+        /* Área do CAPTCHA */
+        .area-captcha {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--cinza-escuro);
+            border: 1px dashed var(--vermelho-principal);
+            border-radius: 8px;
+            text-align: center;
+            color: #cccccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 24px;
+            background: linear-gradient(90deg, #cc001a, #ff0022);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 0, 34, 0.5);
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Painel Principal */
+        .painel {
+            display: none;
+        }
+
+        .cabecalho {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .inicial {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0022, #880011);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--vermelho-brilho);
+        }
+
+        .info-aluno h2 {
+            font-size: 20px;
+            color: var(--texto-branco);
+        }
+
+        .info-aluno p {
+            color: #aaaaaa;
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        .grade {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #110003, #050001);
+            border: 1px solid var(--vermelho-principal);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: 0 0 12px var(--vermelho-brilho);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .icone {
+            font-size: 26px;
+            color: var(--vermelho-principal);
+            margin-bottom: 8px;
+        }
+
+        .numero {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--texto-branco);
+        }
+
+        .legenda {
+            font-size: 15px;
+            color: #cccccc;
+        }
+
+        .abas {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .aba {
+            padding: 12px 18px;
+            background: #0a0002;
+            border: 1px solid #330008;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .aba.ativo {
+            background: var(--vermelho-principal);
+            border-color: var(--vermelho-principal);
+            box-shadow: 0 0 8px var(--vermelho-brilho);
+        }
+
+        .conteudo {
+            display: none;
+        }
+
+        .conteudo.ativo {
+            display: block;
+        }
+
+        .atividade {
+            background: #0a0002;
+            border-left: 3px solid var(--vermelho-principal);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 12px 0;
+        }
     </style>
 </head>
 <body>
 
 <!-- Tela de Login -->
 <div class="tela" id="telaLogin">
-    <div class="card">
+    <div class="card-login">
         <h1>SALA DO FUTURO</h1>
-        <label>Seu RA:</label>
-        <input type="text" id="ra" placeholder="Ex: 12345678">
-        <label>Senha da Sala do Futuro:</label>
-        <input type="password" id="senha" placeholder="Sua senha de acesso">
-        <button onclick="conectar()">ENTRAR E BUSCAR DADOS</button>
+
+        <label>UF (Estado):</label>
+        <select id="uf">
+            <option value="SP">São Paulo</option>
+            <option value="AC">Acre</option>
+            <option value="AL">Alagoas</option>
+            <option value="AM">Amazonas</option>
+            <option value="BA">Bahia</option>
+            <option value="CE">Ceará</option>
+            <option value="DF">Distrito Federal</option>
+            <option value="ES">Espírito Santo</option>
+            <option value="GO">Goiás</option>
+            <option value="MA">Maranhão</option>
+            <option value="MT">Mato Grosso</option>
+            <option value="MS">Mato Grosso do Sul</option>
+            <option value="MG">Minas Gerais</option>
+            <option value="PA">Pará</option>
+            <option value="PB">Paraíba</option>
+            <option value="PR">Paraná</option>
+            <option value="PE">Pernambuco</option>
+            <option value="PI">Piauí</option>
+            <option value="RJ">Rio de Janeiro</option>
+            <option value="RN">Rio Grande do Norte</option>
+            <option value="RS">Rio Grande do Sul</option>
+            <option value="RO">Rondônia</option>
+            <option value="RR">Roraima</option>
+            <option value="SC">Santa Catarina</option>
+            <option value="SE">Sergipe</option>
+            <option value="TO">Tocantins</option>
+        </select>
+
+        <label>RA (Registro do Aluno):</label>
+        <input type="text" id="ra" placeholder="Digite seu RA">
+
+        <label>Senha:</label>
+        <input type="password" id="senha" placeholder="Digite sua senha">
+
+        <!-- Área reservada para CAPTCHA/verificador de robô -->
+        <div class="area-captcha">
+            <p>🔍 Verificação de segurança</p>
+            <small>Área para o CAPTCHA ou código de confirmação</small>
+            <br>
+            <input type="text" id="captcha" placeholder="Digite o código da imagem" style="margin-top:10px;">
+        </div>
+
+        <button onclick="conectar()">ENTRAR</button>
     </div>
 </div>
 
-<!-- Tela Principal -->
+<!-- Painel Principal -->
 <div class="tela painel" id="painel">
-    <div class="card info-topo">
-        <div class="inicial" id="letraInicial">?</div>
-        <div>
-            <h2 id="nomeAluno">Carregando...</h2>
-            <p id="serieAluno">---</p>
+    <div class="cabecalho">
+        <div class="inicial" id="letra">?</div>
+        <div class="info-aluno">
+            <h2 id="nome">Carregando...</h2>
+            <p id="serie">---</p>
         </div>
     </div>
 
-    <div class="grid">
-        <div class="item-card">
+    <div class="grade">
+        <div class="card">
+            <div class="icone">✅</div>
             <div class="numero" id="pendentes">0</div>
-            <p class="desc">Pendências</p>
+            <div class="legenda">Atividades Pendentes</div>
         </div>
-        <div class="item-card">
+        <div class="card">
+            <div class="icone">📉</div>
             <div class="numero" id="faltas">0</div>
-            <p class="desc">Faltas</p>
+            <div class="legenda">Faltas</div>
         </div>
-        <div class="item-card">
+        <div class="card">
+            <div class="icone">📊</div>
             <div class="numero" id="frequencia">0%</div>
-            <p class="desc">Frequência</p>
+            <div class="legenda">Frequência</div>
         </div>
-        <div class="item-card">
-            <div class="numero" id="mensagens">0</div>
-            <p class="desc">Mensagens</p>
+        <div class="card">
+            <div class="icone">🎯</div>
+            <div class="numero" id="media">--</div>
+            <div class="legenda">Média Geral</div>
         </div>
     </div>
 
     <div class="abas">
-        <div class="aba ativo" onclick="trocarAba('inicio')">Início</div>
-        <div class="aba" onclick="trocarAba('tarefas')">Tarefa SP</div>
-        <div class="aba" onclick="trocarAba('redacao')">Redação Paulista</div>
+        <div class="aba ativo" onclick="mudarAba('inicio')">Início</div>
+        <div class="aba" onclick="mudarAba('tarefas')">Tarefas</div>
+        <div class="aba" onclick="mudarAba('redacao')">Redação</div>
     </div>
 
-    <div class="card conteudo ativo" id="abaInicio">
-        <h3 style="color: var(--vermelho); margin-bottom: 12px;">Status</h3>
-        <p style="color: var(--texto-suave); line-height: 1.6;">
-            ✅ Hospedado no GitHub<br>
-            ✅ Funciona em qualquer celular<br>
-            ✅ Conecta direto na Sala do Futuro<br>
-            ✅ Busca, mostra e envia suas atividades
-        </p>
+    <div class="conteudo ativo" id="abaInicio">
+        <p style="color: #cccccc; text-align: center; padding: 20px;">✅ Conectado ao sistema</p>
     </div>
 
-    <div class="card conteudo" id="abaTarefas">
-        <h3 style="color: var(--vermelho); margin-bottom: 12px;">Tarefas SP</h3>
-        <button onclick="buscarTarefas()">🔍 Buscar Minhas Tarefas</button>
-        <button onclick="resolverTodas()" style="margin-top: 10px;">⚡ Resolver e Enviar</button>
-        <div id="listaTarefas" style="margin-top: 15px;"></div>
+    <div class="conteudo" id="abaTarefas">
+        <button onclick="buscarTarefas()" style="margin-top:0;">🔍 Buscar Tarefas</button>
+        <button onclick="resolverTarefas()">⚡ Resolver e Enviar</button>
+        <div id="listaTarefas"></div>
     </div>
 
-    <div class="card conteudo" id="abaRedacao">
-        <h3 style="color: var(--vermelho); margin-bottom: 12px;">Redação Paulista</h3>
-        <button onclick="buscarRedacoes()">🔍 Buscar Meus Temas</button>
-        <button onclick="gerarTodas()" style="margin-top: 10px;">✍️ Gerar e Enviar</button>
-        <div id="listaRedacoes" style="margin-top: 15px;"></div>
+    <div class="conteudo" id="abaRedacao">
+        <button onclick="buscarRedacoes()" style="margin-top:0;">🔍 Buscar Temas</button>
+        <button onclick="gerarRedacoes()">✍️ Gerar e Enviar</button>
+        <div id="listaRedacoes"></div>
     </div>
 </div>
 
 <script>
-// Configurações prontas
-const URL_SALA = "https://saladofuturo.educacao.sp.gov.br";
-const PONTE = "https://corsproxy.io/?url="; // Funciona para contornar bloqueios
+// 👇 Link do seu servidor no Render
+const SERVIDOR = "https://servidor-sala-futuro.onrender.com";
+
 let usuario = null;
 
-// 🚀 Login e conexão
 async function conectar() {
+    const uf = document.getElementById("uf").value.trim();
     const ra = document.getElementById("ra").value.trim();
     const senha = document.getElementById("senha").value.trim();
+    const captcha = document.getElementById("captcha").value.trim();
 
-    if (!ra || !senha) {
-        alert("⚠️ Preencha o RA e a senha!");
-        return;
+    if (!uf || !ra || !senha) {
+        return alert("Preencha UF, RA e Senha!");
     }
 
-    const botao = document.querySelector("button");
-    botao.textContent = "Conectando...";
-
+    // Se no futuro precisar do CAPTCHA, ele já está sendo enviado
     try {
-        const resposta = await fetch(`${PONTE}${encodeURIComponent(`${URL_SALA}/api/login`)}`, {
+        const res = await fetch(`${SERVIDOR}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ra: ra, senha: senha })
+            body: JSON.stringify({ uf, ra, senha, captcha })
         });
-
-        const dados = await resposta.json();
-
-        if (!dados.sucesso) throw new Error(dados.mensagem || "RA ou senha incorretos");
-
-        usuario = {
-            ra: ra,
-            senha: senha,
-            nome: dados.nome || "Aluno",
-            serie: dados.serie || "Não informado",
-            pendentes: dados.pendencias || 0,
-            faltas: dados.faltas || 0,
-            frequencia: dados.frequencia || 0,
-            tarefas: [],
-            redacoes: []
-        };
-
-        abrirSistema();
-        alert("✅ Conectado com sucesso!");
-
-    } catch (erro) {
-        alert("❌ Erro: " + erro.message);
+        const dados = await res.json();
+        if (!dados.sucesso) throw new Error(dados.mensagem);
+        usuario = { uf, ra, senha, ...dados.usuario };
+        abrirPainel();
+    } catch (e) {
+        alert("Erro: " + e.message);
     }
-
-    botao.textContent = "ENTRAR E BUSCAR DADOS";
 }
 
-function abrirSistema() {
+function abrirPainel() {
     document.getElementById("telaLogin").style.display = "none";
-    document.getElementById("painel").style.display = "block, grid, flex";
-
-    document.getElementById("letraInicial.textContent = usuario.nome.charAt(0).toUpperCase();
-    document.getElementById("nomeAluno").textContent = usuario.nome;
-    document.getElementById("serieAluno").textContent = usuario.serie;
-
+    document.getElementById("painel").style.display = "block";
+    document.getElementById("letra").textContent = usuario.nome.charAt(0).toUpperCase();
+    document.getElementById("nome").textContent = usuario.nome;
+    document.getElementById("serie").textContent = usuario.serie || "";
     atualizarDados();
 }
 
 function atualizarDados() {
-    document.getElementById("pendentes").textContent = usuario.pendentes;
-    document.getElementById("faltas").textContent = usuario.faltas;
-    document.getElementById("frequencia").textContent = `${usuario.frequencia}%`;
+    document.getElementById("pendentes").textContent = usuario.pendentes || 0;
+    document.getElementById("faltas").textContent = usuario.faltas || 0;
+    document.getElementById("frequencia").textContent = `${usuario.frequencia || 0}%`;
+    document.getElementById("media").textContent = usuario.media || "--";
 }
 
-function trocarAba(nome) {
-    document.querySelectorAll(".aba").forEach(el => el.classList.remove("ativo"));
-    document.querySelectorAll(".conteudo").forEach(el => el.classList.remove("ativo"));
-
+function mudarAba(nome) {
+    document.querySelectorAll(".aba").forEach(a => a.classList.remove("ativo"));
+    document.querySelectorAll(".conteudo").forEach(c => c.classList.remove("ativo"));
     event.target.classList.add("ativo");
     document.getElementById(`aba${nome.charAt(0).toUpperCase() + nome.slice(1)}`).classList.add("ativo");
 }
 
 async function buscarTarefas() {
-    const lista = document.getElementById("listaTarefas");
-    lista.innerHTML = "<p style='color: var(--texto-suave);'>Carregando...</p>";
-
+    const div = document.getElementById("listaTarefas");
+    div.innerHTML = "<p style='text-align:center; color:#aaa;'>Carregando...</p>";
     try {
-        const res = await fetch(`${PONTE}${encodeURIComponent(`${URL_SALA}/api/tarefas?ra=${usuario.ra}&senha=${usuario.senha}`)}`);
+        const res = await fetch(`${SERVIDOR}/tarefas`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uf: usuario.uf, ra: usuario.ra, senha: usuario.senha })
+        });
         usuario.tarefas = (await res.json()).lista || [];
         listarTarefas();
     } catch {
-        lista.innerHTML = "<p style='color: var(--amarelo);'>Não foi possível carregar</p>";
+        div.innerHTML = "<p style='color:#ff6666; text-align:center;'>Erro ao carregar</p>";
     }
 }
 
 async function buscarRedacoes() {
-    const lista = document.getElementById("listaRedacoes");
-    lista.innerHTML = "<p style='color: var(--texto-suave);'>Carregando...</p>";
-
+    const div = document.getElementById("listaRedacoes");
+    div.innerHTML = "<p style='text-align:center; color:#aaa;'>Carregando...</p>";
     try {
-        const res = await fetch(`${PONTE}${encodeURIComponent(`${URL_SALA}/api/redacao-paulista?ra=${usuario.ra}&senha=${usuario.senha}`)}`);
+        const res = await fetch(`${SERVIDOR}/redacoes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uf: usuario.uf, ra: usuario.ra, senha: usuario.senha })
+        });
         usuario.redacoes = (await res.json()).lista || [];
         listarRedacoes();
     } catch {
-        lista.innerHTML = "<p style='color: var(--amarelo);'>Não foi possível carregar</p>";
+        div.innerHTML = "<p style='color:#ff6666; text-align:center;'>Erro ao carregar</p>";
     }
-}
-
-async function resolverTodas() {
-    if (!usuario.tarefas.length) return alert("⚠️ Busque as tarefas primeiro!");
-
-    for (let t of usuario.tarefas) {
-        if (!t.concluida) {
-            t.resposta = `Resposta conforme conteúdo da Sala do Futuro:
-
-${t.descricao}
-
-A atividade aborda conceitos importantes para o aprendizado. Ao analisar o tema, compreendemos seus pontos principais e sua aplicação prática. Dessa forma, cumprimos o objetivo proposto pela tarefa.`;
-
-            await fetch(`${PONTE}${encodeURIComponent(`${URL_SALA}/api/enviar-tarefa`)}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ra: usuario.ra, senha: usuario.senha, id: t.id, resposta: t.resposta })
-            });
-            t.concluida = true;
-        }
-    }
-
-    usuario.pendentes = Math.max(0, usuario.pendentes - usuario.tarefas.length);
-    atualizarDados();
-    listarTarefas();
-    alert("✅ Todas as tarefas enviadas!");
-}
-
-async function gerarTodas() {
-    if (!usuario.redacoes.length) return alert("⚠️ Busque os temas primeiro!");
-
-    for (let r of usuario.redacoes) {
-        if (!r.concluida) {
-            r.texto = `Redação Paulista: ${r.tema}
-
-**Introdução**
-O tema "${r.tema}" é relevante para a formação acadêmica e cidadã, alinhado aos objetivos da Sala do Futuro. Ele trata de assuntos que ampliam nossa visão de mundo.
-
-**Desenvolvimento**
-Ao analisar o assunto, percebemos que existem diferentes pontos de vista e aspectos importantes a serem considerados. Entender esses pontos ajuda a desenvolver raciocínio e capacidade de argumentação.
-
-**Conclusão**
-Portanto, refletir e estudar esse tema contribui para o crescimento pessoal e cumpre os requisitos da atividade proposta.`;
-
-            await fetch(`${PONTE}${encodeURIComponent(`${URL_SALA}/api/enviar-redacao`)}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ra: usuario.ra, senha: usuario.senha, id: r.id, texto: r.texto })
-            });
-            r.concluida = true;
-        }
-    }
-
-    usuario.pendentes = Math.max(0, usuario.pendentes - usuario.redacoes.length);
-    atualizarDados();
-    listarRedacoes();
-    alert("✅ Redações enviadas!");
 }
 
 function listarTarefas() {
     document.getElementById("listaTarefas").innerHTML = usuario.tarefas.map(t => `
         <div class="atividade">
-            <h4>${t.titulo}</h4>
-            <p>${t.descricao || "Sem descrição"}</p>
-            <p>Status: <span style="color: ${t.concluida ? 'var(--verde)' : 'var(--amarelo)'}">
-                ${t.concluida ? "✅ Concluída" : "⏳ Pendente"}
-            </span></p>
-        </div>
-    `).join("");
+            <h4 style="color:#fff;">${t.titulo}</h4>
+            <p style="color:#ccc; margin:6px 0;">${t.descricao || ""}</p>
+            <p style="color:${t.concluida ? '#22ff66' : '#ffaa22'}">${t.concluida ? "✅ Concluída" : "⏳ Pendente"}</p>
+        </div>`).join("");
 }
 
 function listarRedacoes() {
     document.getElementById("listaRedacoes").innerHTML = usuario.redacoes.map(r => `
         <div class="atividade">
-            <h4>Tema: ${r.tema}</h4>
-            <p>Prazo: ${r.prazo || "Sem prazo"}</p>
-            <p>Status: <span style="color: ${r.concluida ? 'var(--verde)' : 'var(--amarelo)'}">
-                ${r.concluida ? "✅ Enviada" : "⏳ Pendente"}
-            </span></p>
-        </div>
-    `).join("");
+            <h4 style="color:#fff;">Tema: ${r.tema}</h4>
+            <p style="color:${r.concluida ? '#22ff66' : '#ffaa22'}">${r.concluida ? "✅ Enviada" : "⏳ Pendente"}</p>
+        </div>`).join("");
+}
+
+async function resolverTarefas() {
+    if (!usuario.tarefas?.length) return alert("Busque as tarefas primeiro!");
+    for (let t of usuario.tarefas) {
+        if (!t.concluida) {
+            t.resposta = `Resposta referente ao tema: ${t.titulo}\n\n${t.descricao}\n\nConteúdo elaborado conforme os conceitos solicitados na atividade.`;
+            await fetch(`${SERVIDOR}/enviar-tarefa`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ uf: usuario.uf, ra: usuario.ra, senha: usuario.senha, id: t.id, resposta: t.resposta })
+            });
+            t.concluida = true;
+        }
+    }
+    listarTarefas();
+    alert("✅ Tarefas enviadas com sucesso!");
+}
+
+async function gerarRedacoes() {
+    if (!usuario.redacoes?.length) return alert("Busque os temas primeiro!");
+    for (let r of usuario.redacoes) {
+        if (!r.concluida) {
+            r.texto = `Redação sobre: ${r.tema}\n\nIntrodução\nO assunto é relevante e traz pontos importantes para a formação do aluno.\n\nDesenvolvimento\nAo analisar o tema, percebemos sua importância no contexto estudado, permitindo compreender melhor os conceitos abordados em aula.\n\nConclusão\nRefletir sobre esse conteúdo ajuda a desenvolver o pensamento crítico e a escrita, fundamentais para o aprendizado.`;
+            await fetch(`${SERVIDOR}/enviar-redacao`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ uf: usuario.uf, ra: usuario.ra, senha: usuario.senha, id: r.id, texto: r.texto })
+            });
+            r.concluida = true;
+        }
+    }
+    listarRedacoes();
+    alert("✅ Redações geradas e enviadas!");
 }
 </script>
 
 </body>
-</html>
+</html> criado por dengue de Goiás
